@@ -100,7 +100,7 @@ namespace JsonParser
         Token parseString();
 
         // Parse number
-        Token parseNumber() noexcept;
+        Token parseNumber();
 
         // Parse keywords(null, true, false)
         Token parseKeyword();

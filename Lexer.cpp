@@ -5,7 +5,7 @@
 
 namespace JsonParser
 {
-    //----------------------PUBLIC
+    //--------------------- PUBLIC
     // Default constructor
     Lexer::Lexer() noexcept : input{}, owns_stream{} {}
 
@@ -55,7 +55,7 @@ namespace JsonParser
      *
      * - @c LEFT_BRACKET ([):                    Type 2,
      *
-     * - @c RIGHT_BRACKET(]):                    Type 3,
+     * - @c RIGHT_BRACKET(]):                  	 Type 3,
      *
      * - @c COLON        (:):                    Type 4,
      *
@@ -73,7 +73,10 @@ namespace JsonParser
      */
     std::vector<Token> Lexer::tokenize()
     {
-        std::vector<Token> tokens;
+        std::vector<Token> tokens; //storage of tokens
+		std::vector<size_t> brace_parity; //bitmask of braces, needs to be 0 before returning token vector
+		std::vector<size_t> bracket_parity; //bitmask of brackets, needs to be 0 before returning token vector
+
         Token token;
 
         do
@@ -85,8 +88,8 @@ namespace JsonParser
         return tokens;
     }
 
-    //---------------------PRIVATE
 
+    //--------------------- PRIVATE
     // Gets the next token in the string or file
     Token Lexer::nextToken()
     {
@@ -196,23 +199,74 @@ namespace JsonParser
     }
 
     // Parse number
-    Token Lexer::parseNumber() noexcept
+    Token Lexer::parseNumber()
     {
         std::string result;
+
         if (current_char == '-')
         {
             result += current_char;
             current_char = getNextChar();
         }
-        while (!input->eof() && isdigit(current_char))
+
+        if (current_char == '0')
         {
             result += current_char;
             current_char = getNextChar();
+            // If the number is not just zero
+            if (isdigit(current_char))
+            {
+                throw std::runtime_error("Invalid number sequence: leading zeros are not allowed");
+            }
         }
+        else if (isdigit(current_char))
+        {
+            while (!input->eof() && isdigit(current_char))
+            {
+                result += current_char;
+                current_char = getNextChar();
+            }
+        }
+        else
+        {
+            throw std::runtime_error("Invalid number sequence: expected digit after optional minus sign");
+        }
+
+        // Frac part
         if (!input->eof() && current_char == '.')
         {
             result += current_char;
             current_char = getNextChar();
+
+            if (!isdigit(current_char))
+            {
+                throw std::runtime_error("Invalid number sequence: expected digit after decimal point");
+            }
+
+            while (!input->eof() && isdigit(current_char))
+            {
+                result += current_char;
+                current_char = getNextChar();
+            }
+        }
+
+        // Exp part
+        if (!input->eof() && (current_char == 'e' || current_char == 'E'))
+        {
+            result += current_char;
+            current_char = getNextChar();
+
+            if (current_char == '+' || current_char == '-')
+            {
+                result += current_char;
+                current_char = getNextChar();
+            }
+
+            if (!isdigit(current_char))
+            {
+                throw std::runtime_error("Invalid number sequence: expected digit after exponent indicator");
+            }
+
             while (!input->eof() && isdigit(current_char))
             {
                 result += current_char;
