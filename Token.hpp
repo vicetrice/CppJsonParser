@@ -11,7 +11,7 @@ namespace JsonParser
 		RIGHT_BRACE,   // }
 		LEFT_BRACKET,  // [
 		RIGHT_BRACKET, // ]
-		COLON,		   // :
+		KEY,		   // "str":
 		COMMA,		   // ,
 		STRING,		   // "..."
 		NUMBER,		   // 123, -123, 1.23, etc.
@@ -19,7 +19,6 @@ namespace JsonParser
 		NUL,		   // null
 		END,		   // End of input
 		UNDEFINED,	   // Ini of var
-		KEY			   // "str":
 	}; // enum class TokenType
 
 	struct Token

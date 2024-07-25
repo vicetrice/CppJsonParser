@@ -5,6 +5,8 @@
 #include <fstream>
 #include "Token.hpp" //Token, TokenType
 
+#include <iostream>
+
 namespace JsonParser
 {
 	//--------------------- PUBLIC
@@ -59,7 +61,7 @@ namespace JsonParser
 	 *
 	 * - @c RIGHT_BRACKET(]):                  	 Type 3,
 	 *
-	 * - @c COLON        (:):                    Type 4,
+	 * - @c KEY			("str":)				Type 4,
 	 *
 	 * - @c COMMA        (,):                    Type 5,
 	 *
@@ -73,7 +75,7 @@ namespace JsonParser
 	 *
 	 * - @c END          (End of input):         Type 10,
 	 *
-	 * - @c UNDEFINED	(undefined):			 Type 11
+	 * - @c UNDEFINED	(undefined):			 Type 11,
 	 */
 	std::vector<Token> Lexer::tokenize()
 	{
@@ -86,7 +88,14 @@ namespace JsonParser
 		{
 			try
 			{
+				skipWhitespace();
 				token = nextToken();
+
+				if (token.Type == TokenType::STRING && current_char == ':')
+				{
+					token.Type = TokenType::KEY;
+					current_char = getNextChar();
+				}
 				// std::cout << "Token: " << token.Value << " (Type: " << static_cast<int>(token.Type) << ")\n";
 				rules.inspect(token.Type);
 				tokens.push_back(token);
@@ -104,7 +113,6 @@ namespace JsonParser
 	// Gets the next token in the string or file
 	Token Lexer::nextToken()
 	{
-		skipWhitespace();
 
 		if (input->eof())
 			return {TokenType::END, ""};
@@ -117,8 +125,6 @@ namespace JsonParser
 			return advance(TokenType::LEFT_BRACKET);
 		if (current_char == ']')
 			return advance(TokenType::RIGHT_BRACKET);
-		if (current_char == ':')
-			return advance(TokenType::COLON);
 		if (current_char == ',')
 			return advance(TokenType::COMMA);
 		if (current_char == '"')

@@ -46,7 +46,7 @@ namespace JsonParser
 		 *
 		 * - @c RIGHT_BRACKET(]):                    Type 3,
 		 *
-		 * - @c COLON        (:):                    Type 4,
+		 * - @c KEY			("str":)				 Type 4,
 		 *
 		 * - @c COMMA        (,):                    Type 5,
 		 *

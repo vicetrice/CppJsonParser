@@ -2,6 +2,8 @@
 #include "Token.hpp"
 #include <stdexcept>
 
+#include <iostream>
+
 namespace JsonParser
 {
 	//--------------------- PRIVATE ---------------------
@@ -16,10 +18,20 @@ namespace JsonParser
 
 	//--------------------- STRING RULES
 
-	//--------------------- COLON RULES
+	//--------------------- KEY RULES
+	bool Rules::AfterKeyComesValue(const TokenType &current_type) const
+	{
+		return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
+	}
 
 	//--------------------- PUBLIC ---------------------
-	Rules::Rules() : previous_type{TokenType::UNDEFINED} {}
+
+	//Default constructor
+	Rules::Rules() : previous_type{TokenType::UNDEFINED}
+	{
+	}
+
+	//Destructor
 	Rules::~Rules() {}
 
 	/**
@@ -33,25 +45,27 @@ namespace JsonParser
 		// std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
 		if (previous_type != TokenType::UNDEFINED)
 		{
-			switch (current_type)
+			switch (previous_type)
 			{
 			case TokenType::STRING:
 				if (TwoSuccession(current_type))
 				{
-					throw std::runtime_error("2 string succession detected");
-				}
-				break;
-			case TokenType::COLON:
-				if (TwoSuccession(current_type))
-				{
-					throw std::runtime_error("2 colon succession detected");
+					throw std::runtime_error("+2 string succession detected");
 				}
 				break;
 			case TokenType::COMMA:
 				if (TwoSuccession(current_type))
 				{
-					throw std::runtime_error("2 comma succession detected");
+					throw std::runtime_error("+2 comma succession detected");
 				}
+
+				break;
+			case TokenType::KEY:
+				if (!AfterKeyComesValue(current_type))
+				{
+					throw std::runtime_error("Value expected");
+				}
+
 				break;
 
 			default:

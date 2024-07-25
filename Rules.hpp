@@ -10,7 +10,10 @@ namespace JsonParser
 	class Rules
 	{
 	public:
+		// Default constructor
 		Rules();
+
+		// Destructor
 		~Rules();
 
 		/**
@@ -32,7 +35,8 @@ namespace JsonParser
 
 		//--------------------- STRING RULES
 
-		//--------------------- COLON RULES
+		//--------------------- KEY RULES
+		bool AfterKeyComesValue(const TokenType &current_type) const;
 
 	}; // class Rules
 } // namespace JsonParser
