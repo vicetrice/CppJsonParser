@@ -19,6 +19,7 @@ namespace JsonParser
 		NUL,		   // null
 		END,		   // End of input
 		UNDEFINED,	   // Ini of var
+		KEY			   // "str":
 	}; // enum class TokenType
 
 	struct Token
