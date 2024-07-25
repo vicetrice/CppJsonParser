@@ -109,8 +109,8 @@ namespace JsonParser
 	 */
 	bool Rules::inspect(const TokenType &current_type)
 	{
-		//std::cout << " (Prev_Type: " << static_cast<int>(previous_type) << ")\n";
-		//std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
+		// std::cout << " (Prev_Type: " << static_cast<int>(previous_type) << ")\n";
+		// std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
 
 		if (OrderOfEntry.empty())
 		{
@@ -239,6 +239,15 @@ namespace JsonParser
 		}
 		previous_type = current_type;
 		return true;
+	}
+
+	/**
+	 * @brief verify if the vectr OrderOfEntry of the brackets/braces is empty
+	 * @return true if is empty
+	 */
+	bool Rules::empty() const
+	{
+		return OrderOfEntry.empty();
 	}
 
 } // namespace JsonParser

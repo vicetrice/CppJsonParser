@@ -23,6 +23,12 @@ namespace JsonParser
 		 */
 		bool inspect(const TokenType &type);
 
+		/**
+		 * @brief verify if the vectr OrderOfEntry of the brackets/braces is empty
+		 * @return true if is empty
+		 */
+		bool empty() const;
+
 	private:
 		TokenType previous_type;
 		std::vector<size_t> OrderOfEntry; // Storage of the order of entries in brackets/braces

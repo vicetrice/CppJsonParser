@@ -106,6 +106,12 @@ namespace JsonParser
 			}
 		} while (token.Type != TokenType::END);
 
+		if (!rules.empty())
+		{
+			throw std::runtime_error("Unbalanced brackets/Braces");
+		}
+		
+
 		return tokens;
 	}
 
