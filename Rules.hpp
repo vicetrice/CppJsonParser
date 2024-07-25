@@ -38,6 +38,9 @@ namespace JsonParser
 		//--------------------- KEY RULES
 		bool AfterKeyComesValue(const TokenType &current_type) const;
 
+		//--------------------- LBRACE RULES
+		bool RightIsKeyOrRBrace(const TokenType &current_type) const;
+
 	}; // class Rules
 } // namespace JsonParser
 #endif

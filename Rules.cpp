@@ -24,14 +24,20 @@ namespace JsonParser
 		return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
 	}
 
+	//--------------------- LBRACE RULES
+	bool Rules::RightIsKeyOrRBrace(const TokenType &current_type) const
+	{
+		return (current_type == TokenType::RIGHT_BRACE || current_type == TokenType::KEY);
+	}
+
 	//--------------------- PUBLIC ---------------------
 
-	//Default constructor
+	// Default constructor
 	Rules::Rules() : previous_type{TokenType::UNDEFINED}
 	{
 	}
 
-	//Destructor
+	// Destructor
 	Rules::~Rules() {}
 
 	/**
@@ -64,6 +70,12 @@ namespace JsonParser
 				if (!AfterKeyComesValue(current_type))
 				{
 					throw std::runtime_error("Value expected");
+				}
+				break;
+			case TokenType::LEFT_BRACE:
+				if (!RightIsKeyOrRBrace(current_type))
+				{
+					throw std::runtime_error("Expected key or Rbrace");
 				}
 
 				break;
