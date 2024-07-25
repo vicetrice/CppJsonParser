@@ -33,7 +33,7 @@ namespace JsonParser
 
 		void extractFirst();
 
-		// set true the values of an array of bool
+		// set true/false the values of an array of bool
 		void SetBool(size_t booli);
 
 		//--------------------- GENERAL RULES
@@ -41,10 +41,13 @@ namespace JsonParser
 		// There can´t be a type 6/4 next to a type 6/4
 		bool TwoSuccession(const TokenType &current_type) const;
 
+		bool RightIsCommaOrRbr(const TokenType &current_type) const;
+
 		//--------------------- STRING RULES
 
 		//--------------------- KEY RULES
-		bool AfterKeyComesValue(const TokenType &current_type) const;
+		bool
+		AfterKeyComesValue(const TokenType &current_type) const;
 
 		//--------------------- LBRACE RULES
 		bool RightIsKeyOrRBrace(const TokenType &current_type) const;

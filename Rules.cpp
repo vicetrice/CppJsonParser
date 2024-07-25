@@ -14,17 +14,24 @@ namespace JsonParser
 		// popback bit
 		OrderOfEntry[pos] >>= 1;
 		--shifts;
-		if (shifts == 0 && pos)
+		if (shifts == 0)
 		{
-			shifts = 64;
+			if (pos)
+			{
+				shifts = 64;
+				--pos;
+			}
 			OrderOfEntry.pop_back();
-			pos--;
 		}
 	}
 
 	// set true/false the values of an array of bool
 	void Rules::SetBool(size_t booli)
 	{
+		if (OrderOfEntry.empty())
+		{
+			OrderOfEntry.push_back(0);
+		}
 		OrderOfEntry[pos] = (OrderOfEntry[pos] << 1) | booli;
 		++shifts;
 		if (shifts == sizeof(size_t) * 8)
@@ -49,7 +56,10 @@ namespace JsonParser
 		return (previous_type == current_type);
 	}
 
-	//--------------------- STRING RULES
+	bool Rules::RightIsCommaOrRbr(const TokenType &current_type) const
+	{
+		return (current_type == TokenType::COMMA || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
+	}
 
 	//--------------------- KEY RULES
 
@@ -99,8 +109,13 @@ namespace JsonParser
 	 */
 	bool Rules::inspect(const TokenType &current_type)
 	{
-		// std::cout << " (Prev_Type: " << static_cast<int>(previous_type) << ")\n";
-		// std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
+		//std::cout << " (Prev_Type: " << static_cast<int>(previous_type) << ")\n";
+		//std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
+
+		if (OrderOfEntry.empty())
+		{
+			throw std::runtime_error("End Expected");
+		}
 		if (previous_type != TokenType::UNDEFINED)
 		{
 			switch (previous_type)
@@ -110,6 +125,11 @@ namespace JsonParser
 				{
 					throw std::runtime_error("+2 string succession detected");
 				}
+				if (!RightIsCommaOrRbr(current_type))
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
+
 				break;
 			case TokenType::COMMA:
 				if (TwoSuccession(current_type))
@@ -164,6 +184,11 @@ namespace JsonParser
 				{
 					throw std::runtime_error("Expected RBracket");
 				}
+				if (!RightIsCommaOrRbr(current_type) && current_type != TokenType::END)
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
+
 				break;
 			case TokenType::RIGHT_BRACE:
 
@@ -175,15 +200,44 @@ namespace JsonParser
 				{
 					throw std::runtime_error("Expected RBrace");
 				}
+				if (!RightIsCommaOrRbr(current_type) && current_type != TokenType::END)
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
 
 				break;
+			case TokenType::NUMBER:
 
+				if (!RightIsCommaOrRbr(current_type))
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
+
+				break;
+			case TokenType::BOOLEAN:
+
+				if (!RightIsCommaOrRbr(current_type))
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
+
+				break;
+			case TokenType::NUL:
+
+				if (!RightIsCommaOrRbr(current_type))
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
+
+				break;
+			case TokenType::END:
+				break;
 			default:
+				throw std::runtime_error("Unknown Type");
 				break;
 			}
 		}
 		previous_type = current_type;
-
 		return true;
 	}
 
