@@ -2,7 +2,7 @@
 #define RULES_HPP
 
 #include <vector>	 //std::vector
-#include <cctype>	 //size_t
+#include <cstddef>	 //size_t
 #include "Token.hpp" //Token
 
 namespace JsonParser
@@ -24,9 +24,17 @@ namespace JsonParser
 		bool inspect(const TokenType &type);
 
 	private:
-		// std::vector<size_t> brace_parity;	// bitmask of braces, needs to be 0 before returning token vector
-		// std::vector<size_t> bracket_parity; // bitmask of braces, needs to be 0 before returning token vector
 		TokenType previous_type;
+		std::vector<size_t> OrderOfEntry; // Storage of the order of entries in brackets/braces
+		size_t shifts;					  // Number of shifts done
+		size_t pos;						  // position in vector
+
+		bool ImInBracket() const;
+
+		void extractFirst();
+
+		// set true the values of an array of bool
+		void SetBool(size_t booli);
 
 		//--------------------- GENERAL RULES
 
@@ -40,6 +48,10 @@ namespace JsonParser
 
 		//--------------------- LBRACE RULES
 		bool RightIsKeyOrRBrace(const TokenType &current_type) const;
+
+		//--------------------- COMMA RULES
+		bool RightIsKeyOrLBraceOrBracket(const TokenType &current_type) const;
+		bool RightIsNotValue(const TokenType &current_type) const;
 
 	}; // class Rules
 } // namespace JsonParser

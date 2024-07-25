@@ -8,6 +8,39 @@ namespace JsonParser
 {
 	//--------------------- PRIVATE ---------------------
 
+	void Rules::extractFirst()
+	{
+
+		// popback bit
+		OrderOfEntry[pos] >>= 1;
+		--shifts;
+		if (shifts == 0 && pos)
+		{
+			shifts = 64;
+			OrderOfEntry.pop_back();
+			pos--;
+		}
+	}
+
+	// set true/false the values of an array of bool
+	void Rules::SetBool(size_t booli)
+	{
+		OrderOfEntry[pos] = (OrderOfEntry[pos] << 1) | booli;
+		++shifts;
+		if (shifts == sizeof(size_t) * 8)
+		{
+			shifts = 0;
+			OrderOfEntry.push_back(0);
+			pos++;
+		}
+	}
+
+	// See if the first Bit is 0 or 1
+	bool Rules::ImInBracket() const
+	{
+		return (OrderOfEntry[pos] & 1);
+	}
+
 	//--------------------- GENERAL RULES
 
 	// There can´t be a type 6/4/5 next to a type 6/4/5
@@ -19,12 +52,26 @@ namespace JsonParser
 	//--------------------- STRING RULES
 
 	//--------------------- KEY RULES
+
 	bool Rules::AfterKeyComesValue(const TokenType &current_type) const
 	{
 		return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
 	}
 
+	//--------------------- COMMA RULES
+
+	bool Rules::RightIsKeyOrLBraceOrBracket(const TokenType &current_type) const
+	{
+		return (current_type == TokenType::KEY || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET);
+	}
+
+	bool Rules::RightIsNotValue(const TokenType &current_type) const
+	{
+		return (current_type == TokenType::KEY || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
+	}
+
 	//--------------------- LBRACE RULES
+
 	bool Rules::RightIsKeyOrRBrace(const TokenType &current_type) const
 	{
 		return (current_type == TokenType::RIGHT_BRACE || current_type == TokenType::KEY);
@@ -33,12 +80,17 @@ namespace JsonParser
 	//--------------------- PUBLIC ---------------------
 
 	// Default constructor
-	Rules::Rules() : previous_type{TokenType::UNDEFINED}
+	Rules::Rules() : previous_type{TokenType::UNDEFINED}, shifts{}, pos{}
 	{
+		OrderOfEntry.push_back(0);
 	}
 
 	// Destructor
-	Rules::~Rules() {}
+	Rules::~Rules()
+	{
+		OrderOfEntry.clear();
+		OrderOfEntry.shrink_to_fit();
+	}
 
 	/**
 	 * @brief Inspect if the stream follow the rules
@@ -65,17 +117,63 @@ namespace JsonParser
 					throw std::runtime_error("+2 comma succession detected");
 				}
 
+				if (shifts)
+				{
+					if (!ImInBracket())
+					{
+						if (!RightIsKeyOrLBraceOrBracket(current_type))
+						{
+							throw std::runtime_error("Property expected or trailing comma in brace");
+						}
+					}
+					else
+					{
+						if (RightIsNotValue(current_type))
+						{
+							throw std::runtime_error("Property expected or trailing comma in bracket");
+						}
+					}
+				}
+
 				break;
 			case TokenType::KEY:
 				if (!AfterKeyComesValue(current_type))
 				{
 					throw std::runtime_error("Value expected");
 				}
+
 				break;
 			case TokenType::LEFT_BRACE:
 				if (!RightIsKeyOrRBrace(current_type))
 				{
 					throw std::runtime_error("Expected key or Rbrace");
+				}
+				SetBool(0);
+
+				break;
+			case TokenType::LEFT_BRACKET:
+
+				SetBool(1);
+				break;
+			case TokenType::RIGHT_BRACKET:
+				if (ImInBracket())
+				{
+					extractFirst();
+				}
+				else
+				{
+					throw std::runtime_error("Expected RBracket");
+				}
+				break;
+			case TokenType::RIGHT_BRACE:
+
+				if (!ImInBracket())
+				{
+					extractFirst();
+				}
+				else
+				{
+					throw std::runtime_error("Expected RBrace");
 				}
 
 				break;
