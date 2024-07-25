@@ -80,7 +80,7 @@
 						"id_str": "866260188",
 						"indices": [
 							0,
-							9
+							9{}
 						]
 					}
 				]
@@ -105,6 +105,12 @@
 			"in_reply_to_user_id": null,
 			"in_reply_to_user_id_str": null,
 			"in_reply_to_screen_name": null,
+			"meta": [
+				1,
+				3124,
+				null,
+				true
+			],
 			"user": {
 				"id": 903487807,
 				"id_str": "903487807",
@@ -410,6 +416,12 @@
 						"urls": []
 					}
 				},
+				"meta": [
+					1,
+					3124,
+					null,
+					true
+				],
 				"protected": false,
 				"followers_count": 1387,
 				"friends_count": 903,
@@ -640,11 +652,9 @@
 				],
 				"entities": {
 					"hashtags": [],
-					{
-						"symbols": [],
-						"urls": [],
-						"user_mentions": []
-					}
+					"symbols": [],
+					"urls": {},
+					"user_mentions": []
 				},
 				"favorited": false,
 				"retweeted": false,

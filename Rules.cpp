@@ -60,9 +60,9 @@ namespace JsonParser
 
 	//--------------------- COMMA RULES
 
-	bool Rules::RightIsKeyOrLBraceOrBracket(const TokenType &current_type) const
+	bool Rules::RightIsKey(const TokenType &current_type) const
 	{
-		return (current_type == TokenType::KEY || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET);
+		return (current_type == TokenType::KEY);
 	}
 
 	bool Rules::RightIsNotValue(const TokenType &current_type) const
@@ -121,7 +121,7 @@ namespace JsonParser
 				{
 					if (!ImInBracket())
 					{
-						if (!RightIsKeyOrLBraceOrBracket(current_type))
+						if (!RightIsKey(current_type))
 						{
 							throw std::runtime_error("Property expected or trailing comma in brace");
 						}
