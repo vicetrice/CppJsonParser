@@ -1,17 +1,18 @@
 # Variables
 CXX = g++ # o usa clang++ si prefieres
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
-TARGET = lexer
+
 
 # Source files
 SRCS = Lexer.cpp Rules.cpp main.cpp
 OBJS = $(SRCS:.cpp=.o)
+DEPS = Lexer.hpp Rules.hpp Token.hpp
 
 # Define platform-specific variables
 ifeq ($(OS),Windows_NT)
     # Windows-specific settings
     RM = del /Q
-    EXT = .exe
+    EXT =.exe
 else
     # Unix-like settings (Linux/macOS)
     RM = rm -f
@@ -19,19 +20,19 @@ else
 endif
 
 # Default target
-all: $(TARGET) 
+all: lexer
 
 # Link object files into the final executable
-$(TARGET)$(EXT): $(OBJS)
+lexer: $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
 # Compile source files into object files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+%.o: %.cpp $(DEPS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 # Clean up build artifacts
 clean:
-	$(RM) $(TARGET)$(EXT) $(OBJS)
+	$(RM) Lexer$(EXT) $(OBJS)
 
 # Phony targets
 .PHONY: all clean
