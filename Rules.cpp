@@ -45,55 +45,6 @@ namespace JsonParser
 		}
 	}
 
-	// See if the LSB is 0 or 1
-	bool Rules::ImInBracket() const
-	{
-		if (OrderOfEntry.empty())
-		{
-			throw std::runtime_error("Vector is empty");
-		}
-		return (OrderOfEntry[pos] & 1);
-	}
-
-	//--------------------- GENERAL RULES
-
-	// There can´t be a type 6/4/5 next to a type 6/4/5
-	bool Rules::TwoSuccession(const TokenType &current_type) const
-	{
-		return (previous_type == current_type);
-	}
-
-	bool Rules::RightIsCommaOrRbr(const TokenType &current_type)
-	{
-		return (current_type == TokenType::COMMA || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
-	}
-
-	//--------------------- KEY RULES
-
-	bool Rules::AfterKeyComesValue(const TokenType &current_type)
-	{
-		return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
-	}
-
-	//--------------------- COMMA RULES
-
-	bool Rules::RightIsKey(const TokenType &current_type)
-	{
-		return (current_type == TokenType::KEY);
-	}
-
-	bool Rules::RightIsNotValue(const TokenType &current_type)
-	{
-		return (current_type == TokenType::KEY || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
-	}
-
-	//--------------------- LBRACE RULES
-
-	bool Rules::RightIsKeyOrRBrace(const TokenType &current_type)
-	{
-		return (current_type == TokenType::RIGHT_BRACE || current_type == TokenType::KEY);
-	}
-
 	//--------------------- PUBLIC ---------------------
 
 	// Default constructor
@@ -128,10 +79,7 @@ namespace JsonParser
 			switch (previous_type)
 			{
 			case TokenType::STRING:
-				if (TwoSuccession(current_type))
-				{
-					throw std::runtime_error("+2 string succession detected");
-				}
+				
 				if (!RightIsCommaOrRbr(current_type))
 				{
 					throw std::runtime_error("Expected comma or RBrace/RBracket");
@@ -139,10 +87,6 @@ namespace JsonParser
 
 				break;
 			case TokenType::COMMA:
-				if (TwoSuccession(current_type))
-				{
-					throw std::runtime_error("+2 comma succession detected");
-				}
 
 				if (shifts)
 				{
@@ -246,15 +190,6 @@ namespace JsonParser
 		}
 		previous_type = current_type;
 		return true;
-	}
-
-	/**
-	 * @brief verify if the vectr OrderOfEntry of the brackets/braces is empty
-	 * @return true if is empty
-	 */
-	bool Rules::empty() const
-	{
-		return OrderOfEntry.empty();
 	}
 
 } // namespace JsonParser

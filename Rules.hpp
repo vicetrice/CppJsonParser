@@ -4,6 +4,7 @@
 #include <vector>	 //std::vector
 #include <cstddef>	 //size_t
 #include "Token.hpp" //Token
+#include <stdexcept> //std::runtime_error
 
 namespace JsonParser
 {
@@ -27,7 +28,10 @@ namespace JsonParser
 		 * @brief verify if the vectr OrderOfEntry of the brackets/braces is empty
 		 * @return true if is empty
 		 */
-		bool empty() const;
+		inline bool empty() const
+		{
+			return OrderOfEntry.empty();
+		}
 
 	private:
 		TokenType previous_type;
@@ -35,8 +39,17 @@ namespace JsonParser
 		size_t shifts;					  // Number of shifts done
 		size_t pos;						  // position in vector
 
-		bool ImInBracket() const;
+		// See if the LSB is 0 or 1
+		inline bool ImInBracket() const
+		{
+			if (OrderOfEntry.empty())
+			{
+				throw std::runtime_error("Vector is empty");
+			}
+			return (OrderOfEntry[pos] & 1);
+		}
 
+		// extract LSB of an array of bool
 		void extractFirst();
 
 		// set true/false the values of an array of bool
@@ -44,23 +57,36 @@ namespace JsonParser
 
 		//--------------------- GENERAL RULES
 
-		// There can´t be a type 6/4 next to a type 6/4
-		bool TwoSuccession(const TokenType &current_type) const;
-
-		static bool RightIsCommaOrRbr(const TokenType &current_type);
+		static inline bool RightIsCommaOrRbr(const TokenType &current_type) noexcept
+		{
+			return (current_type == TokenType::COMMA || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
+		}
 
 		//--------------------- KEY RULES
 
-		static bool AfterKeyComesValue(const TokenType &current_type);
-
-		//--------------------- LBRACE RULES
-
-		static bool RightIsKeyOrRBrace(const TokenType &current_type);
+		static inline bool AfterKeyComesValue(const TokenType &current_type) noexcept
+		{
+			return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
+		}
 
 		//--------------------- COMMA RULES
 
-		static bool RightIsKey(const TokenType &current_type);
-		static bool RightIsNotValue(const TokenType &current_type);
+		static inline bool RightIsKey(const TokenType &current_type) noexcept
+		{
+			return (current_type == TokenType::KEY);
+		}
+
+		static inline bool RightIsNotValue(const TokenType &current_type) noexcept
+		{
+			return (current_type == TokenType::KEY || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
+		}
+
+		//--------------------- LBRACE RULES
+
+		static inline bool RightIsKeyOrRBrace(const TokenType &current_type) noexcept
+		{
+			return (current_type == TokenType::RIGHT_BRACE || current_type == TokenType::KEY);
+		}
 
 	}; // class Rules
 } // namespace JsonParser
