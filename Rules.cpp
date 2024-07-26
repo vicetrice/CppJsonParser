@@ -63,33 +63,33 @@ namespace JsonParser
 		return (previous_type == current_type);
 	}
 
-	bool Rules::RightIsCommaOrRbr(const TokenType &current_type) const
+	bool Rules::RightIsCommaOrRbr(const TokenType &current_type)
 	{
 		return (current_type == TokenType::COMMA || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
 	}
 
 	//--------------------- KEY RULES
 
-	bool Rules::AfterKeyComesValue(const TokenType &current_type) const
+	bool Rules::AfterKeyComesValue(const TokenType &current_type)
 	{
 		return (current_type == TokenType::BOOLEAN || current_type == TokenType::NUL || current_type == TokenType::LEFT_BRACE || current_type == TokenType::LEFT_BRACKET || current_type == TokenType::NUMBER || current_type == TokenType::STRING);
 	}
 
 	//--------------------- COMMA RULES
 
-	bool Rules::RightIsKey(const TokenType &current_type) const
+	bool Rules::RightIsKey(const TokenType &current_type)
 	{
 		return (current_type == TokenType::KEY);
 	}
 
-	bool Rules::RightIsNotValue(const TokenType &current_type) const
+	bool Rules::RightIsNotValue(const TokenType &current_type)
 	{
 		return (current_type == TokenType::KEY || current_type == TokenType::RIGHT_BRACE || current_type == TokenType::RIGHT_BRACKET);
 	}
 
 	//--------------------- LBRACE RULES
 
-	bool Rules::RightIsKeyOrRBrace(const TokenType &current_type) const
+	bool Rules::RightIsKeyOrRBrace(const TokenType &current_type)
 	{
 		return (current_type == TokenType::RIGHT_BRACE || current_type == TokenType::KEY);
 	}

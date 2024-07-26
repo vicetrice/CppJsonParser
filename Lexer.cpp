@@ -2,7 +2,7 @@
 #include "Rules.hpp" //Rules
 #include <string>	 //std::string
 #include <stdexcept> //std::runtime_error
-#include <fstream>	 //std::ifstream, std::istringstream
+#include <fstream>	 //std::ifstream, std::istringstream,std::istreambuf_iterator
 #include "Token.hpp" //Token, TokenType
 
 #include <iostream>
@@ -11,7 +11,7 @@ namespace JsonParser
 {
 	//--------------------- PUBLIC
 	// Default constructor
-	Lexer::Lexer() noexcept : input{}, owns_stream{} {}
+	Lexer::Lexer() noexcept : input{nullptr}, owns_stream{}, current_char{} {}
 
 	/**
 	 * @brief Generate a Lexer object from a file
@@ -102,12 +102,20 @@ namespace JsonParser
 			}
 			catch (const std::exception &e)
 			{
+				tokens.clear();
+				tokens.shrink_to_fit();
+				if (owns_stream)
+					delete input;
 				throw;
 			}
 		} while (token.Type != TokenType::END);
 
 		if (!rules.empty())
 		{
+			tokens.clear();
+			tokens.shrink_to_fit();
+			if (owns_stream)
+				delete input;
 			throw std::runtime_error("Unbalanced brackets/Braces");
 		}
 
@@ -154,7 +162,9 @@ namespace JsonParser
 	void Lexer::skipWhitespace() noexcept
 	{
 		while (!input->eof() && isspace(current_char))
+		{
 			current_char = getNextChar();
+		}
 	}
 
 	// Parse string

@@ -21,7 +21,7 @@ namespace JsonParser
 		 * @param current_type Type of the token
 		 * @return bool indicating if it follows the rules, true if it follow the rules
 		 */
-		bool inspect(const TokenType &type);
+		bool inspect(const TokenType &current_type);
 
 		/**
 		 * @brief verify if the vectr OrderOfEntry of the brackets/braces is empty
@@ -47,20 +47,20 @@ namespace JsonParser
 		// There can´t be a type 6/4 next to a type 6/4
 		bool TwoSuccession(const TokenType &current_type) const;
 
-		bool RightIsCommaOrRbr(const TokenType &current_type) const;
+		static bool RightIsCommaOrRbr(const TokenType &current_type);
 
 		//--------------------- KEY RULES
 
-		bool AfterKeyComesValue(const TokenType &current_type) const;
+		static bool AfterKeyComesValue(const TokenType &current_type);
 
 		//--------------------- LBRACE RULES
 
-		bool RightIsKeyOrRBrace(const TokenType &current_type) const;
+		static bool RightIsKeyOrRBrace(const TokenType &current_type);
 
 		//--------------------- COMMA RULES
 
-		bool RightIsKey(const TokenType &current_type) const;
-		bool RightIsNotValue(const TokenType &current_type) const;
+		static bool RightIsKey(const TokenType &current_type);
+		static bool RightIsNotValue(const TokenType &current_type);
 
 	}; // class Rules
 } // namespace JsonParser
