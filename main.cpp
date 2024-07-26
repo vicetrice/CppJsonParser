@@ -25,7 +25,7 @@ int main()
 
 	std::cout << "FROM FILE" << '\n';
 
-	std::ifstream file("prueba.json");
+	std::ifstream file("prueba2.json");
 
 	if (!file.is_open())
 	{
@@ -36,9 +36,8 @@ int main()
 	JsonParser::Lexer lexer2(file);
 	std::vector<JsonParser::Token> tokens2 = lexer2.tokenize(); // Fixed: Use lexer2 here
 
-	for (unsigned i = 0; i < 999; ++i)
+	for (auto &token : tokens2)
 	{
-		const JsonParser::Token &token = tokens2[i];
 		std::cout << "Token: " << token.Value << " (Type: " << static_cast<int>(token.Type) << ")\n";
 	}
 

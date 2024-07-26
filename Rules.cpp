@@ -6,9 +6,14 @@ namespace JsonParser
 {
 	//--------------------- PRIVATE ---------------------
 
+	// extract LSB of an array of bool
 	void Rules::extractFirst()
 	{
 
+		if (OrderOfEntry.empty())
+		{
+			throw std::runtime_error("Vector is empty");
+		}
 		// popback bit
 		OrderOfEntry[pos] >>= 1;
 		--shifts;
@@ -40,9 +45,13 @@ namespace JsonParser
 		}
 	}
 
-	// See if the first Bit is 0 or 1
+	// See if the LSB is 0 or 1
 	bool Rules::ImInBracket() const
 	{
+		if (OrderOfEntry.empty())
+		{
+			throw std::runtime_error("Vector is empty");
+		}
 		return (OrderOfEntry[pos] & 1);
 	}
 
