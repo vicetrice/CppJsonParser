@@ -1,8 +1,6 @@
 #include "Rules.hpp"
-#include "Token.hpp"
-#include <stdexcept>
-
-#include <iostream>
+#include "Token.hpp" //TokenType
+#include <stdexcept> //std::runtime_error
 
 namespace JsonParser
 {
@@ -182,7 +180,7 @@ namespace JsonParser
 				}
 				else
 				{
-					throw std::runtime_error("Expected RBracket");
+					throw std::runtime_error("Expected Bracket");
 				}
 				if (!RightIsCommaOrRbr(current_type) && current_type != TokenType::END)
 				{
@@ -198,7 +196,7 @@ namespace JsonParser
 				}
 				else
 				{
-					throw std::runtime_error("Expected RBrace");
+					throw std::runtime_error("Expected Brace");
 				}
 				if (!RightIsCommaOrRbr(current_type) && current_type != TokenType::END)
 				{

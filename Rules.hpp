@@ -49,16 +49,16 @@ namespace JsonParser
 
 		bool RightIsCommaOrRbr(const TokenType &current_type) const;
 
-		//--------------------- STRING RULES
-
 		//--------------------- KEY RULES
-		bool
-		AfterKeyComesValue(const TokenType &current_type) const;
+
+		bool AfterKeyComesValue(const TokenType &current_type) const;
 
 		//--------------------- LBRACE RULES
+
 		bool RightIsKeyOrRBrace(const TokenType &current_type) const;
 
 		//--------------------- COMMA RULES
+
 		bool RightIsKey(const TokenType &current_type) const;
 		bool RightIsNotValue(const TokenType &current_type) const;
 

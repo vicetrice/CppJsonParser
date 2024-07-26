@@ -1,8 +1,8 @@
 #include "Lexer.hpp"
-#include "Rules.hpp"
-#include <string>
-#include <stdexcept>
-#include <fstream>
+#include "Rules.hpp" //Rules
+#include <string>	 //std::string
+#include <stdexcept> //std::runtime_error
+#include <fstream>	 //std::ifstream, std::istringstream
 #include "Token.hpp" //Token, TokenType
 
 #include <iostream>
@@ -110,7 +110,6 @@ namespace JsonParser
 		{
 			throw std::runtime_error("Unbalanced brackets/Braces");
 		}
-		
 
 		return tokens;
 	}
