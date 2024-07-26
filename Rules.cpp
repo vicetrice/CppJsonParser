@@ -21,7 +21,7 @@ namespace JsonParser
 		{
 			if (pos)
 			{
-				shifts = 64;
+				shifts = sizeof(size_t) * 8;
 				--pos;
 			}
 			OrderOfEntry.pop_back();
