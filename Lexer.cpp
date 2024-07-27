@@ -98,7 +98,7 @@ namespace JsonParser
 				}
 				// std::cout << "Token: " << token.Value << " (Type: " << static_cast<int>(token.Type) << ")\n";
 				rules.inspect(token.Type);
-				tokens.push_back(token);
+				// tokens.push_back(token);
 			}
 			catch (const std::exception &e)
 			{
@@ -117,6 +117,11 @@ namespace JsonParser
 			if (owns_stream)
 				delete input;
 			throw std::runtime_error("Unbalanced brackets/Braces");
+		}
+
+		if (owns_stream)
+		{
+			delete input;
 		}
 
 		return tokens;
@@ -322,6 +327,16 @@ namespace JsonParser
 		if (result == "null")
 			return {TokenType::NUL, result};
 		throw std::runtime_error("Unknown keyword: " + result);
+	}
+
+	// Get the next char of current_char
+	char Lexer::getNextChar() const noexcept
+	{
+		int ch = input->get();
+		if (ch == std::istream::traits_type::eof())
+			return '\0';
+
+		return static_cast<char>(ch);
 	}
 
 } // namespace JsonParser
