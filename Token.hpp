@@ -1,7 +1,20 @@
 
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
-#include <string> //std::string
+
+#if __cplusplus >= 201703L
+#include <string_view> // std::string_view
+namespace JsonParser
+{
+	using StringType = std::string_view;
+}
+#else
+#include <string> // std::string
+namespace JsonParser
+{
+	using StringType = std::string;
+}
+#endif
 
 namespace JsonParser
 {
@@ -24,7 +37,7 @@ namespace JsonParser
 	struct Token
 	{
 		TokenType Type;
-		std::string Value;
+		StringType Value;
 	}; // struct Token
 }
 #endif
