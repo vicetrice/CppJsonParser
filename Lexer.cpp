@@ -19,7 +19,7 @@ namespace JsonParser
 	 *
 	 * Constructor from std::ifstream
 	 */
-	Lexer::Lexer(std::ifstream &file) : input(&file), owns_stream(false)
+	Lexer::Lexer(std::ifstream &file) : input{&file}, owns_stream{false}
 	{
 		if (!file.is_open())
 		{
@@ -34,7 +34,7 @@ namespace JsonParser
 	 *
 	 * Constructor from std::string
 	 */
-	Lexer::Lexer(const std::string &str) noexcept : input(new std::istringstream(str)), owns_stream(true)
+	Lexer::Lexer(const std::string &str) noexcept : input{new std::istringstream(str)}, owns_stream{true}
 	{
 		current_char = getNextChar();
 	}
@@ -324,5 +324,4 @@ namespace JsonParser
 		throw std::runtime_error("Unknown keyword: " + result);
 	}
 
-	
 } // namespace JsonParser
