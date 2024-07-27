@@ -324,9 +324,5 @@ namespace JsonParser
 		throw std::runtime_error("Unknown keyword: " + result);
 	}
 
-	// Get the next char of current_char
-	char Lexer::getNextChar() noexcept
-	{
-		return input->get();
-	}
+	
 } // namespace JsonParser

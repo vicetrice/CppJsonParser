@@ -88,7 +88,10 @@ namespace JsonParser
 		Token parseKeyword();
 
 		// Get the next char of current_char
-		char getNextChar() noexcept;
+		inline char getNextChar() const noexcept
+		{
+			return input->get();
+		}
 	}; // class Lexer
 } // namespace JsonParser
 
