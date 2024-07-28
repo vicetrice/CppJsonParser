@@ -2,19 +2,7 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
-#if __cplusplus >= 201703L
-#include <string_view> // std::string_view
-namespace JsonParser
-{
-	using StringType = std::string_view;
-}
-#else
 #include <string> // std::string
-namespace JsonParser
-{
-	using StringType = std::string;
-}
-#endif
 
 namespace JsonParser
 {
@@ -27,17 +15,20 @@ namespace JsonParser
 		KEY,		   // "str":
 		COMMA,		   // ,
 		STRING,		   // "..."
-		NUMBER,		   // 123, -123, 1.23, etc.
+		NUMBER,		   // 123, -123, etc.
 		BOOLEAN,	   // true, false
 		NUL,		   // null
 		END,		   // End of input
 		UNDEFINED,	   // Ini of var
+		DOUBLE		   // 1.23
 	}; // enum class TokenType
 
 	struct Token
 	{
+		//--------------------- ATTRIBUTES
+
 		TokenType Type;
-		StringType Value;
+		std::string Value;
 	}; // struct Token
 }
 #endif
