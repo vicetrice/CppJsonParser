@@ -3,9 +3,9 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++17
 
 # Source files
-SRCS = Lexer.cpp Rules.cpp main.cpp
+SRCS = Parser.cpp Rules.cpp main.cpp
 OBJS = $(SRCS:.cpp=.o)
-DEPS = Lexer.hpp Rules.hpp Token.hpp
+DEPS = Parser.hpp Rules.hpp Token.hpp
 
 # Define platform-specific variables
 ifeq ($(OS),Windows_NT)
@@ -19,10 +19,10 @@ else
 endif
 
 # Default target
-all: lexer debug
+all: parser debug
 
 # Link object files into the final executable
-lexer: $(OBJS)
+parser: $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
 # Debug build
@@ -34,19 +34,19 @@ debug: $(OBJS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 # Clean up build artifacts
-clean: clean-debug clean-lexer clean-obj
+clean: clean-debug clean-parser clean-obj
 
 # Clean debug executable
 clean-debug:
 	$(RM) debug$(EXT)
 
-# Clean lexer executable
-clean-lexer:
-	$(RM) lexer$(EXT)
+# Clean parser executable
+clean-parser:
+	$(RM) parser$(EXT)
 
 # Clean object files
 clean-obj:
 	$(RM) $(OBJS)
 
 # Phony targets
-.PHONY: all clean debug clean-debug clean-lexer clean-obj
+.PHONY: all clean debug clean-debug clean-parser clean-obj
