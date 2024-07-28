@@ -2,9 +2,10 @@
 #include "Token.hpp" //TokenType
 #include <stdexcept> //std::runtime_error
 
+#include <iostream>
 namespace JsonParser
 {
-	//--------------------- PRIVATE ---------------------
+	//--------------------- PRIVATE METHODS ---------------------
 
 	// extract LSB of an array of bool
 	void Rules::extractFirst()
@@ -48,13 +49,13 @@ namespace JsonParser
 	//--------------------- PUBLIC ---------------------
 
 	// Default constructor
-	Rules::Rules() : previous_type{TokenType::UNDEFINED}, shifts{}, pos{}
+	Rules::Rules() noexcept : previous_type{TokenType::UNDEFINED}, shifts{}, pos{}
 	{
 		OrderOfEntry.push_back(0);
 	}
 
 	// Destructor
-	Rules::~Rules()
+	Rules::~Rules() noexcept
 	{
 		OrderOfEntry.clear();
 		OrderOfEntry.shrink_to_fit();
@@ -64,6 +65,7 @@ namespace JsonParser
 	 * @brief Inspect if the stream follow the rules
 	 * @param current_type Type of the token
 	 * @return bool indicating if it follows the rules, true if it follow the rules
+	 *  @throws std::runtime_error if Rules not followed
 	 */
 	bool Rules::inspect(const TokenType &current_type)
 	{
@@ -71,15 +73,14 @@ namespace JsonParser
 		// std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
 
 		if (OrderOfEntry.empty())
-		{
-			throw std::runtime_error("End Expected");
-		}
+			throw std::runtime_error("End/Start Expected");
+
 		if (previous_type != TokenType::UNDEFINED)
 		{
 			switch (previous_type)
 			{
 			case TokenType::STRING:
-				
+
 				if (!RightIsCommaOrRbr(current_type))
 				{
 					throw std::runtime_error("Expected comma or RBrace/RBracket");
@@ -156,6 +157,12 @@ namespace JsonParser
 					throw std::runtime_error("Expected comma or RBrace/RBracket");
 				}
 
+				break;
+			case TokenType::DOUBLE:
+				if (!RightIsCommaOrRbr(current_type))
+				{
+					throw std::runtime_error("Expected comma or RBrace/RBracket");
+				}
 				break;
 			case TokenType::NUMBER:
 
