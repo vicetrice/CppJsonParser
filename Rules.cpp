@@ -79,14 +79,6 @@ namespace JsonParser
 		{
 			switch (previous_type)
 			{
-			case TokenType::STRING:
-
-				if (!RightIsCommaOrRbr(current_type))
-				{
-					throw std::runtime_error("Expected comma or RBrace/RBracket");
-				}
-
-				break;
 			case TokenType::COMMA:
 
 				if (shifts)
@@ -159,28 +151,10 @@ namespace JsonParser
 
 				break;
 			case TokenType::DOUBLE:
-				if (!RightIsCommaOrRbr(current_type))
-				{
-					throw std::runtime_error("Expected comma or RBrace/RBracket");
-				}
-				break;
 			case TokenType::NUMBER:
-
-				if (!RightIsCommaOrRbr(current_type))
-				{
-					throw std::runtime_error("Expected comma or RBrace/RBracket");
-				}
-
-				break;
 			case TokenType::BOOLEAN:
-
-				if (!RightIsCommaOrRbr(current_type))
-				{
-					throw std::runtime_error("Expected comma or RBrace/RBracket");
-				}
-
-				break;
 			case TokenType::NUL:
+			case TokenType::STRING:
 
 				if (!RightIsCommaOrRbr(current_type))
 				{
