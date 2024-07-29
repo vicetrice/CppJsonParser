@@ -1,9 +1,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <chrono> 
+#include <chrono>
 #include "Parser.hpp"
-//#include <JSONarray.hpp>
+// #include <JSONarray.hpp>
 
 int main()
 {
@@ -20,7 +20,10 @@ int main()
 	// Medir el tiempo para la sección de lectura de archivo y tokenización
 	auto start = high_resolution_clock::now();
 	JsonParserVicetrice::Parser Parser2(file);
-	std::vector<JsonParserVicetrice::Token> tokens2 = Parser2.tokenize();
+	JsonParserVicetrice::JSONstruct strut;
+	strut = std::move(Parser2.tokenize());
+
+	strut.consult();
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();

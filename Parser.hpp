@@ -5,6 +5,7 @@
 #include <vector>	 //std::vector
 #include <sstream>	 //std::ifstream, std::istream
 #include "Token.hpp" //Token
+#include "JSONstruct.hpp"
 
 namespace JsonParserVicetrice
 {
@@ -64,7 +65,7 @@ namespace JsonParserVicetrice
 		 *
 		 * - @c DOUBLE		(1.23):					 Type 12
 		 */
-		std::vector<Token> tokenize();
+		JSONstruct tokenize();
 
 	private:
 		//--------------------- ATTRIBUTES

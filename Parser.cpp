@@ -1,10 +1,10 @@
 #include "Parser.hpp"
-#include "Rules.hpp" //Rules
-#include <string>	 //std::string
-#include <stdexcept> //std::runtime_error
-#include <fstream>	 //std::ifstream, std::istringstream,std::istreambuf_iterator
-#include "Token.hpp" //Token, TokenType
-// #include "JSONstruct.hpp" //JSONstruct
+#include "Rules.hpp"	  //Rules
+#include <string>		  //std::string
+#include <stdexcept>	  //std::runtime_error
+#include <fstream>		  //std::ifstream, std::istringstream,std::istreambuf_iterator
+#include "Token.hpp"	  //Token, TokenType
+#include "JSONstruct.hpp" //JSONstruct
 
 #include <iostream>
 
@@ -80,11 +80,11 @@ namespace JsonParserVicetrice
 	 *
 	 *  - @c DOUBLE 	(1.23):					Type 12
 	 */
-	std::vector<Token> Parser::tokenize()
+	JSONstruct Parser::tokenize()
 	{
 		std::vector<Token> tokens; // storage of tokens
 		Rules rules;
-		// JSONstruct finalStruct;
+		JSONstruct finalStruct;
 
 		Token token;
 		// int cont = 0;
@@ -107,6 +107,7 @@ namespace JsonParserVicetrice
 				cont++;*/
 
 				rules.inspect(token.Type);
+				finalStruct.add(token);
 
 				// tokens.push_back(token);
 			}
@@ -134,7 +135,7 @@ namespace JsonParserVicetrice
 			delete input;
 		}
 
-		return tokens;
+		return finalStruct;
 	}
 
 	//--------------------- PRIVATE

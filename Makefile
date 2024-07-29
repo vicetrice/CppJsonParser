@@ -1,11 +1,11 @@
 # Variables
 CXX = g++ 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++17
+CXXFLAGS = -Wall  -Werror -std=c++17
 
 # Source files
-SRCS = Parser.cpp Rules.cpp main.cpp
+SRCS = Parser.cpp Rules.cpp JSONstruct.cpp main.cpp
 OBJS = $(SRCS:.cpp=.o)
-DEPS = Parser.hpp Rules.hpp Token.hpp
+DEPS = Parser.hpp Rules.hpp Token.hpp JSONobject.hpp JSONarray.hpp JSONstruct.hpp
 
 # Define platform-specific variables
 ifeq ($(OS),Windows_NT)
