@@ -1,10 +1,10 @@
 
-#ifndef TOKEN_HPP
-#define TOKEN_HPP
+#ifndef __________TOKEN_HPP__________
+#define __________TOKEN_HPP__________
 
 #include <string> // std::string
 
-namespace JsonParser
+namespace JsonParserVicetrice
 {
 	enum class TokenType
 	{

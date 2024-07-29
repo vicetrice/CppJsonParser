@@ -1,12 +1,12 @@
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef __________PARSER_HPP__________
+#define __________PARSER_HPP__________
 
 #include <string>	 //std::string
 #include <vector>	 //std::vector
 #include <sstream>	 //std::ifstream, std::istream
 #include "Token.hpp" //Token
 
-namespace JsonParser
+namespace JsonParserVicetrice
 {
 	class Parser
 	{
@@ -96,6 +96,6 @@ namespace JsonParser
 		char getNextChar() const noexcept;
 
 	}; // class Parser
-} // namespace JsonParser
+} // namespace JsonParserVicetrice
 
 #endif

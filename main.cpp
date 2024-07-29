@@ -1,14 +1,15 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <chrono> // Para la medición del tiempo
-#include "Lexer.hpp"
+#include <chrono> 
+#include "Parser.hpp"
+//#include <JSONarray.hpp>
 
 int main()
 {
 	using namespace std::chrono; // Para simplificar el uso de chrono
 
-	std::ifstream file("prueba.json");
+	std::ifstream file("exit.json");
 
 	if (!file.is_open())
 	{
@@ -18,8 +19,8 @@ int main()
 
 	// Medir el tiempo para la sección de lectura de archivo y tokenización
 	auto start = high_resolution_clock::now();
-	JsonParser::Lexer lexer2(file);
-	std::vector<JsonParser::Token> tokens2 = lexer2.tokenize();
+	JsonParserVicetrice::Parser Parser2(file);
+	std::vector<JsonParserVicetrice::Token> tokens2 = Parser2.tokenize();
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();

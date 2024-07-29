@@ -3,7 +3,7 @@
 #include <stdexcept> //std::runtime_error
 
 #include <iostream>
-namespace JsonParser
+namespace JsonParserVicetrice
 {
 	//--------------------- PRIVATE METHODS ---------------------
 
@@ -173,4 +173,4 @@ namespace JsonParser
 		return true;
 	}
 
-} // namespace JsonParser
+} // namespace JsonParserVicetrice

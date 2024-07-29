@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-namespace JsonParser
+namespace JsonParserVicetrice
 {
 	//--------------------- PUBLIC
 	// Default constructor
@@ -351,4 +351,4 @@ namespace JsonParser
 		return static_cast<char>(ch);
 	}
 
-} // namespace JsonParser
+} // namespace JsonParserVicetrice

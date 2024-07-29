@@ -1,12 +1,12 @@
-#ifndef RULES_HPP
-#define RULES_HPP
+#ifndef __________RULES_HPP__________
+#define __________RULES_HPP__________
 
 #include <vector>	 //std::vector
 #include <cstddef>	 //size_t
 #include "Token.hpp" //Token
 #include <stdexcept> //std::runtime_error
 
-namespace JsonParser
+namespace JsonParserVicetrice
 {
 	class Rules
 	{
@@ -95,5 +95,5 @@ namespace JsonParser
 		}
 
 	}; // class Rules
-} // namespace JsonParser
+} // namespace JsonParserVicetrice
 #endif
