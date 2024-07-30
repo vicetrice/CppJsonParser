@@ -9,7 +9,7 @@ int main()
 {
 	using namespace std::chrono; // Para simplificar el uso de chrono
 
-	std::ifstream file("exit.json");
+	std::ifstream file("prueba.json");
 
 	if (!file.is_open())
 	{

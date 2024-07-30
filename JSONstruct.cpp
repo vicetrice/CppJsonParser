@@ -37,15 +37,16 @@ namespace JsonParserVicetrice
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
+                    position.push_back(ptr_to_struct.get());
                     ptrObj->add_any_except_string(key, std::move(ptr_to_struct));
                 }
                 else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
                 {
                     ptrArr = *ptr;
+                    position.push_back(ptr_to_struct.get());
                     ptrArr->add_any_except_string(std::move(ptr_to_struct));
                 }
-                position.push_back(ptr_to_struct.get());
-            }
+                        }
 
             break;
         case TokenType::LEFT_BRACKET:
@@ -66,14 +67,15 @@ namespace JsonParserVicetrice
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
+                    position.push_back(ptr_to_struct.get());
                     ptrObj->add_any_except_string(key, std::move(ptr_to_struct));
                 }
                 else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
                 {
                     ptrArr = *ptr;
+                    position.push_back(ptr_to_struct.get());
                     ptrArr->add_any_except_string(std::move(ptr_to_struct));
                 }
-                position.push_back(ptr_to_struct.get());
             }
             break;
 
