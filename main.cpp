@@ -23,8 +23,6 @@ int main()
 	JsonParserVicetrice::JSONstruct strut;
 	strut = std::move(Parser2.tokenize());
 
-	strut.consult();
-
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();
 

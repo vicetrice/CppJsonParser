@@ -3,7 +3,7 @@
 namespace JsonParserVicetrice
 {
 
-    JSONstruct::JSONstruct() = default;
+    JSONstruct::JSONstruct() : noFirst{false} {};
 
     JSONstruct::~JSONstruct() = default;
 
@@ -15,46 +15,65 @@ namespace JsonParserVicetrice
     {
         JSONobject *ptrObj;
         JSONarray *ptrArr;
-        int64_t i;
-        double d;
-        bool out;
-        std::string str;
-        char car;
 
         switch (token.Type)
         {
         case TokenType::LEFT_BRACE:
 
-            if (noFirst)
+            if (!noFirst)
             {
                 finalStruct = std::make_unique<JSONobject>();
-                auto *ptr = std::get_if<std::unique_ptr<JSONobject>>(&finalStruct);
-                position.push_back(ptr->get());
-                noFirst = true;
+                if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&finalStruct))
+                {
+                    position.push_back(ptr->get());
+                    noFirst = true;
+                }
             }
             else
             {
-                std::unique_ptr<JSONobject> ptr = std::make_unique<JSONobject>();
-                position.push_back(ptr.get());
-                ptrObj = std::get<JSONobject *>(position.back());
-                ptrObj->add(key, std::move(ptr));
+
+                std::unique_ptr<JSONobject> ptr_to_struct = std::make_unique<JSONobject>();
+
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, std::move(ptr_to_struct));
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string(std::move(ptr_to_struct));
+                }
+                position.push_back(ptr_to_struct.get());
             }
 
             break;
         case TokenType::LEFT_BRACKET:
-            if (noFirst)
+            if (!noFirst)
             {
                 finalStruct = std::make_unique<JSONarray>();
-                auto *ptr = std::get_if<std::unique_ptr<JSONarray>>(&finalStruct);
-                position.push_back(ptr->get());
-                noFirst = true;
+                if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&finalStruct))
+                {
+                    position.push_back(ptr->get());
+                    noFirst = true;
+                }
+                // std::cout << "pase por aqui 2" << '\n';
             }
             else
             {
-                std::unique_ptr<JSONarray> ptr = std::make_unique<JSONarray>();
-                position.push_back(ptr.get());
-                ptrArr = std::get<JSONarray *>(position.back());
-                ptrArr->add(std::move(ptr));
+                std::unique_ptr<JSONarray> ptr_to_struct = std::make_unique<JSONarray>();
+
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, std::move(ptr_to_struct));
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string(std::move(ptr_to_struct));
+                }
+                position.push_back(ptr_to_struct.get());
             }
             break;
 
@@ -64,96 +83,84 @@ namespace JsonParserVicetrice
             break;
         case TokenType::DOUBLE:
 
-            d = std::stod(token.Value);
             if (noFirst)
             {
-                std::visit([&](auto &ptr)
-                           {
-                    using T = std::decay_t<decltype(ptr)>;
-                    if constexpr (std::is_same_v<T, JSONobject *>)
-                    {
-                        ptr->add(key, d);
-                    }
-                    else if constexpr (std::is_same_v<T, JSONarray *>)
-                    {
-                        ptr->add(d);
-                    } }, position.back());
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, std::stold(token.Value));
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string(std::stold(token.Value));
+                }
             }
-
-            break;
         case TokenType::NUMBER:
 
-            i = std::stoll(token.Value);
-
             if (noFirst)
             {
-                std::visit([&](auto &ptr)
-                           {
-                    using T = std::decay_t<decltype(ptr)>;
-                    if constexpr (std::is_same_v<T, JSONobject *>)
-                    {
-                        ptr->add(key, i);
-                    }
-                    else if constexpr (std::is_same_v<T, JSONarray *>)
-                    {
-                        ptr->add(i);
-                    } }, position.back());
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, std::stoll(token.Value));
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string(std::stoll(token.Value));
+                }
             }
 
             break;
         case TokenType::BOOLEAN:
 
-            out = token.Value == "true" ? true : false;
             if (noFirst)
             {
-                std::visit([&](auto &ptr)
-                           {
-                    using T = std::decay_t<decltype(ptr)>;
-                    if constexpr (std::is_same_v<T, JSONobject *>)
-                    {
-                        ptr->add(key, out);
-                    }
-                    else if constexpr (std::is_same_v<T, JSONarray *>)
-                    {
-                        ptr->add(out);
-                    } }, position.back());
+                bool booli = token.Value == "true" ? true : false;
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, booli);
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string(booli);
+                }
             }
 
             break;
         case TokenType::STRING:
 
-            str = token.Value;
             if (noFirst)
             {
-                std::visit([&](auto &ptr)
-                           {
-                    using T = std::decay_t<decltype(ptr)>;
-                    if constexpr (std::is_same_v<T, JSONobject *>)
-                    {
-                        ptr->add(key, std::move(str));
-                    }
-                    else if constexpr (std::is_same_v<T, JSONarray *>)
-                    {
-                        ptr->add(std::move(str));
-                    } }, position.back());
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_string(key, token.Value);
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_string(token.Value);
+                }
             }
 
             break;
         case TokenType::NUL:
-            car = '\0';
             if (noFirst)
             {
-                std::visit([&](auto &ptr)
-                           {
-                    using T = std::decay_t<decltype(ptr)>;
-                    if constexpr (std::is_same_v<T, JSONobject *>)
-                    {
-                        ptr->add(key, car);
-                    }
-                    else if constexpr (std::is_same_v<T, JSONarray *>)
-                    {
-                        ptr->add(car);
-                    } }, position.back());
+                if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+                {
+                    ptrObj = *ptr;
+                    ptrObj->add_any_except_string(key, '\0');
+                }
+                else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
+                {
+                    ptrArr = *ptr;
+                    ptrArr->add_any_except_string('\0');
+                }
             }
 
             break;

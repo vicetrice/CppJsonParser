@@ -16,35 +16,46 @@ namespace JsonParserVicetrice
     class JSONobject
     {
     public:
-        using VariantType = std::variant<std::string, int64_t, bool, double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
 
         inline JSONobject() = default;
         inline ~JSONobject() = default;
 
-        inline VariantType &operator[](const std::string &key)
+        inline void add_any_except_string(const std::string &key, VariantType value)
         {
-            return BasicPair[key];
-        }
-
-        inline void add(const std::string &key, VariantType &&value)
-        {
-            BasicPair[key] = std::move(value);
-        }
-
-        inline const VariantType &get(const std::string &key) const
-        {
-            auto it = BasicPair.find(key);
-            if (it != BasicPair.end())
+            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&value))
             {
-                return it->second;
+                BasicPair[key] = std::move(*ptr);
             }
-            throw std::runtime_error("Key not found: " + key);
+            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&value))
+            {
+                BasicPair[key] = std::move(*ptr);
+            }
+            else if (std::holds_alternative<std::string>(value))
+            {
+                std::cout << "Use add_string method" << std::endl;
+            }
+            else if (auto ptr = std::get_if<char>(&value))
+            {
+                BasicPair[key] = *ptr;
+            }
+            else if (auto ptr = std::get_if<long double>(&value))
+            {
+                BasicPair[key] = *ptr;
+            }
+            else if (auto ptr = std::get_if<bool>(&value))
+            {
+                BasicPair[key] = *ptr;
+            }
+            else if (auto ptr = std::get_if<int64_t>(&value))
+            {
+                BasicPair[key] = *ptr;
+            }
         }
 
-        // Public getter for BasicPair
-        inline const std::unordered_map<std::string, VariantType> &getBasicPair() const
+        inline void add_string(const std::string &key, const std::string &str)
         {
-            return BasicPair;
+            BasicPair[key] = str;
         }
 
     private:
