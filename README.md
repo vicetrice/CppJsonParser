@@ -25,24 +25,20 @@ To build the project, ensure you have a C++ compiler and make utility available.
 ```bash
 g++ -std=c++11 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp
 ```
+Or change `main.cpp` in `Makefile` to use `make`. 
 
 ### Example Usage
 
 The example below demonstrates how to use the `JSON` class to parse a JSON file and access its contents. 
 
-Create a file named `main.cpp` and paste the following code:
-
 ```cpp
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <chrono>
 #include "JSON.hpp"
 
 int main()
 {
-    using namespace std::chrono; // Simplify the use of chrono
-
     std::ifstream file("prueba.json");
 
     if (!file.is_open())
@@ -51,30 +47,23 @@ int main()
         return 1; // Indicate an error occurred
     }
 
-    // Measure the time for file reading and tokenization
-    auto start = high_resolution_clock::now();
-
     JsonParserVicetrice::JSON json;
     json.parse(file);
 
-    std::string loca = json["statuses"][0]["id_str"].get<std::string>();
-    std::string loca2 = json["statuses"][1]["text"].get<std::string>();
+    std::string str = json["statuses"][0]["id_str"].get<std::string>();
+    std::string str2 = json["statuses"][1]["text"].get<std::string>();
+    int64_t i = json["statuses"][0]["id"].get<int64_t>();
+    JSONprimitiveType j = json["key"].get<JSONprimitiveType>();
 
-    std::cout << loca << std::endl;
-    std::cout << loca2 << std::endl;
-
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>(end - start).count();
-
-    std::cout << "Execution time: " << duration << " ms" << std::endl;
-
+    std::cout << str << std::endl;
+    std::cout << str2 << std::endl;
     return 0;
 }
 ```
 
 ### Running the Example
 
-1. Ensure you have a valid JSON file named `prueba.json` in the same directory as your executable. The file should contain data structured similarly to this:
+1. The JSON file should contain data structured similarly to this:
 
    ```json
    {
@@ -93,7 +82,11 @@ int main()
    ./parser
    ```
 
-You should see the output of the JSON values from the `prueba.json` file along with the execution time.
+You should see the output of the JSON values from the file.
+
+## JSON basic types convertion
+-
+
 
 ## API Documentation
 
