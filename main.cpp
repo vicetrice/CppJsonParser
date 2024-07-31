@@ -27,7 +27,7 @@ int main()
 	JsonParserVicetrice::JSON json;
 	json.parse(file);
 
-	std::string loca = json["statuses"][0]["metadata"]["result_type"].get<std::string>();
+	long double loca = json["statuses"][0]["id"].get<long double>();
 	std::cout << loca << std::endl;
 
 	auto end = high_resolution_clock::now();
