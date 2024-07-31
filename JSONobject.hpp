@@ -6,167 +6,88 @@
 #include <variant>       // std::variant
 #include <memory>        // std::unique_ptr
 #include <iostream>      // std::ostream
-#include <stdexcept>
+#include <stdexcept>     // std::runtime_error
 #include "JSONarray.hpp"
 
 namespace JsonParserVicetrice
 {
 
-    class JSONarray; // Forward declaration
+    class JSONarray;
 
     class JSONobject
     {
     public:
+        /// Variant type used to store different types of elements in the object.
         using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+
+        /// Variant type used to return different types of elements from the object.
         using VariantTypeI = std::variant<std::string, int64_t, bool, long double, char, JSONobject *, JSONarray *>;
 
+        /**
+         * @brief Default constructor.
+         *
+         * Constructs an empty JSON object.
+         */
         inline JSONobject() = default;
+
+        /**
+         * @brief Default destructor.
+         *
+         * Cleans up any allocated resources.
+         */
         inline ~JSONobject() = default;
 
-        inline void add_any_except_string(const std::string &key, VariantType value)
-        {
+        /**
+         * @brief Adds a value to the object with a given key, excluding strings.
+         *
+         * Adds a value of any type except std::string to the object. If the value is a std::string,
+         * a message is displayed instructing to use the add_string method instead.
+         *
+         * @param key The key associated with the value to add.
+         * @param value The value to add to the object.
+         */
+        void add_any_except_string(const std::string &key, VariantType value) noexcept;
 
-            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&value))
-            {
-                BasicPair[key] = std::move(*ptr);
-            }
-            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&value))
-            {
-                BasicPair[key] = std::move(*ptr);
-            }
-            else if (std::holds_alternative<std::string>(value))
-            {
-                std::cout << "Use add_string method" << std::endl;
-            }
-            else if (auto ptr = std::get_if<char>(&value))
-            {
-                BasicPair[key] = *ptr;
-            }
-            else if (auto ptr = std::get_if<long double>(&value))
-            {
-                BasicPair[key] = *ptr;
-            }
-            else if (auto ptr = std::get_if<bool>(&value))
-            {
-                BasicPair[key] = *ptr;
-            }
-            else if (auto ptr = std::get_if<int64_t>(&value))
-            {
-                BasicPair[key] = *ptr;
-            }
-        }
-
-        inline void add_string(const std::string &key, const std::string &str)
+        /**
+         * @brief Adds a string to the object with a given key.
+         *
+         * Adds a std::string value to the object.
+         *
+         * @param key The key associated with the string to add.
+         * @param str The string to add to the object.
+         */
+        inline void add_string(const std::string &key, const std::string &str) noexcept
         {
             BasicPair[key] = str;
         }
 
-        const VariantTypeI consult(const std::string &key) const
-        {
-            auto it = BasicPair.find(key);
-            if (it == BasicPair.end())
-            {
-                throw std::runtime_error("Key not found.");
-                        }
+        /**
+         * @brief Retrieves an element from the object by key.
+         *
+         * Returns the value associated with the specified key. If the key is not found, an exception is thrown.
+         *
+         * @param key The key of the element to retrieve.
+         * @return The value associated with the specified key.
+         * @throws std::runtime_error If the key is not found in the object.
+         */
+        const VariantTypeI consult(const std::string &key) const;
 
-            if (auto ptr = std::get_if<std::string>(&BasicPair.at(key)))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<bool>(&BasicPair.at(key)))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<long double>(&BasicPair.at(key)))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<char>(&BasicPair.at(key)))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<int64_t>(&BasicPair.at(key)))
-            {
-                return *ptr;
-            }
-            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&BasicPair.at(key)))
-            {
-                /* std::cout << "{\n";
-                 JSONobject *aux = ptr->get();
-                 aux->iterate(aux);
-                 std::cout << "}" << std::endl;*/
-                return ptr->get();
-            }
-            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&BasicPair.at(key)))
-            {
-                /*std::cout << "[\n";
-                JSONarray *aux = ptr->get();
-                iterate(aux);
-                std::cout << "]" << std::endl;*/
-                return ptr->get();
-            }
-            else
-                return 0;
-        }
-
-        /*
-                void iterate(JSONobject *object) const
-                {
-                    bool comma = false;
-                    for (const auto &pair : object->GetMap())
-                    {
-                        if (!comma)
-                        {
-                            comma = true;
-                        }
-                        else
-                            std::cout << ", ";
-                        std::cout << pair.first << ": ";
-                        if (auto ptr = std::get_if<std::string>(&pair.second))
-                        {
-                            std::cout << *ptr;
-                        }
-                        else if (auto ptr = std::get_if<int64_t>(&pair.second))
-                        {
-                            std::cout << *ptr;
-                        }
-                        else if (auto ptr = std::get_if<bool>(&pair.second))
-                        {
-                            std::cout << std::boolalpha << *ptr;
-                        }
-                        else if (auto ptr = std::get_if<long double>(&pair.second))
-                        {
-                            std::cout << *ptr;
-                        }
-                        else if (auto ptr = std::get_if<char>(&pair.second))
-                        {
-                            std::cout << *ptr;
-                        }
-                        else if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&pair.second))
-                        {
-                            std::cout << "{\n";
-                            JSONobject *aux = ptr->get();
-                            iterate(aux);
-                            std::cout << "}" << std::endl;
-                        }
-                        else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&pair.second))
-                        {
-                            std::cout << "[\n";
-                            JSONarray *aux = ptr->get();
-                            aux->iterate(aux);
-                            std::cout << "]" << std::endl;
-                        }
-                    }
-                    std::cout << std::endl;
-                }
-                */
+        /**
+         * @brief Checks if a key exists in the object.
+         *
+         * Throws an exception if the key already exists in the object, indicating that duplicate keys are not allowed.
+         *
+         * @param key The key to check for existence.
+         * @throws std::runtime_error If the key is found in the object.
+         */
+        const void exists(const std::string &key) const;
 
     private:
         //--------------------- ATTRIBUTES
-        std::unordered_map<std::string, VariantType>
-            BasicPair; // unordered_map of basic types
-
+        
+        /// Unordered map to store key-value pairs of basic types.
+        std::unordered_map<std::string, VariantType> BasicPair;
     }; // class JSONobject
 } // namespace JsonParserVicetrice
 
-#endif // JSONOBJECT_HPP
+#endif

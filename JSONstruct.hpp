@@ -25,26 +25,17 @@ namespace JsonParserVicetrice
          */
         void add(const Token &token);
 
-        /*inline void consult(const std::string &key, size_t index)
+        inline const void consultIni(VariantPtr &ret) const noexcept
         {
             if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&finalStruct))
-            {
-                JSONobject *stru = ptr->get();
-                stru->consult(key);
-            }
+                ret = ptr->get();
             else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&finalStruct))
-            {
-                JSONarray *stru = ptr->get();
-                stru->consult(index);
-            }
-        }*/
-        const VariantPtr consultIni() const
-        {
-            return position[0];
+                ret = ptr->get();
         }
 
     private:
         //--------------------- ATTRIBUTES
+        
         using VariantStruct = std::variant<std::unique_ptr<JSONobject>, std::unique_ptr<JSONarray>>;
 
         VariantStruct finalStruct;        // Pointer to start of JsonStructure

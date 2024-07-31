@@ -19,28 +19,20 @@ int main()
 
 	// Medir el tiempo para la sección de lectura de archivo y tokenización
 	auto start = high_resolution_clock::now();
-	/*JsonParserVicetrice::Parser Parser2(file);
-	JsonParserVicetrice::JSONstruct strut;
-	strut = std::move(Parser2.tokenize());*/
-	// strut.consult("statuses", 0);
 
 	JsonParserVicetrice::JSON json;
 	json.parse(file);
 
-	long double loca = json["statuses"][0]["id"].get<long double>();
+	std::string loca = json["statuses"][0]["id_str"].get<std::string>();
+	std::string loca2 = json["statuses"][1]["text"].get<std::string>();
+
 	std::cout << loca << std::endl;
+	std::cout << loca2 << std::endl;
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();
 
 	std::cout << "Tiempo de ejecución: " << duration << " ms" << std::endl;
-
-	/*
-	for (auto &token : tokens2)
-	{
-		std::cout << "Token: " << token.Value << " (Type: " << static_cast<int>(token.Type) << ")\n";
-	}
-	*/
 
 	return 0;
 }

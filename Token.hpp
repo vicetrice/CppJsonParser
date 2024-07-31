@@ -30,5 +30,5 @@ namespace JsonParserVicetrice
 		TokenType Type;
 		std::string Value;
 	}; // struct Token
-}
+} // namespace JsonParserVicetrice
 #endif

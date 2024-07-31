@@ -82,12 +82,10 @@ namespace JsonParserVicetrice
 	 */
 	JSONstruct Parser::tokenize()
 	{
-		std::vector<Token> tokens; // storage of tokens
 		Rules rules;
 		JSONstruct finalStruct;
 
 		Token token;
-		// int cont = 0;
 
 		do
 		{
@@ -101,21 +99,12 @@ namespace JsonParserVicetrice
 					token.Type = TokenType::KEY;
 					current_char = getNextChar();
 				}
-				/*if (cont < 100000)
-					std::cout << "Token: " << token.Value << " (Type: " << static_cast<int>(token.Type) << ")\n";
-
-				cont++;*/
 
 				rules.inspect(token.Type);
 				finalStruct.add(token);
-				
-
-				// tokens.push_back(token);
 			}
 			catch (const std::exception &e)
 			{
-				tokens.clear();
-				tokens.shrink_to_fit();
 				if (owns_stream)
 					delete input;
 				throw;
@@ -124,8 +113,6 @@ namespace JsonParserVicetrice
 
 		if (!rules.empty())
 		{
-			tokens.clear();
-			tokens.shrink_to_fit();
 			if (owns_stream)
 				delete input;
 			throw std::runtime_error("Unbalanced brackets/Braces");

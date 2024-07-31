@@ -1,7 +1,6 @@
 #include "JSONstruct.hpp"
 #include <iostream>
 
-
 namespace JsonParserVicetrice
 {
 
@@ -86,11 +85,11 @@ namespace JsonParserVicetrice
             position.pop_back();
             break;
         case TokenType::DOUBLE:
-            //std::cout << "pase por aqui DOUBLE con: " << token.Value << std::endl;
+            // std::cout << "pase por aqui DOUBLE con: " << token.Value << std::endl;
 
             if (noFirst)
             {
-                
+
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
@@ -173,6 +172,11 @@ namespace JsonParserVicetrice
             break;
 
         case TokenType::KEY:
+            if (auto ptr = std::get_if<JSONobject *>(&position.back()))
+            {
+                ptrObj = *ptr;
+                ptrObj->exists(token.Value);
+            }
             key = token.Value;
 
             break;

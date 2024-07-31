@@ -69,9 +69,6 @@ namespace JsonParserVicetrice
 	 */
 	bool Rules::inspect(const TokenType &current_type)
 	{
-		// std::cout << " (Prev_Type: " << static_cast<int>(previous_type) << ")\n";
-		// std::cout << " (Curr_Type: " << static_cast<int>(current_type) << ")\n";
-
 		if (OrderOfEntry.empty())
 			throw std::runtime_error("End/Start Expected");
 

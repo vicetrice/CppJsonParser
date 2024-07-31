@@ -1,11 +1,11 @@
 #ifndef __________JSONARRAY_HPP__________
 #define __________JSONARRAY_HPP__________
 
-#include <string>  //std::string
-#include <variant> //std::variant
-#include <vector>  //std::vector
-#include <memory>  //std::unique_ptr
-#include <iostream>
+#include <string>  // std::string
+#include <variant> // std::variant
+#include <vector>  // std::vector
+#include <memory>  // std::unique_ptr
+#include <iostream> //std::cout
 
 namespace JsonParserVicetrice
 {
@@ -15,156 +15,64 @@ namespace JsonParserVicetrice
     class JSONarray
     {
     public:
-        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        /// Variant type used to return different types of elements from the array.
         using VariantTypeI = std::variant<std::string, int64_t, bool, long double, char, JSONobject *, JSONarray *>;
+        /// Variant type used to store different types of elements in the array.
+        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
 
+        /**
+         * @brief Default constructor.
+         *
+         * Constructs an empty JSON array.
+         */
         inline JSONarray() = default;
 
+        /**
+         * @brief Default destructor.
+         *
+         * Cleans up any allocated resources.
+         */
         inline ~JSONarray() = default;
 
-        inline void add_any_except_string(VariantType value)
-        {
-            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&value))
-            {
-                BasicElement.push_back(std::move(*ptr));
-            }
-            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&value))
-            {
-                BasicElement.push_back(std::move(*ptr));
-            }
-            else if (std::holds_alternative<std::string>(value))
-            {
-                std::cout << "Use add_string method" << std::endl;
-            }
-            else if (auto ptr = std::get_if<char>(&value))
-            {
-                BasicElement.push_back(*ptr);
-            }
-            else if (auto ptr = std::get_if<long double>(&value))
-            {
-                BasicElement.push_back(*ptr);
-            }
-            else if (auto ptr = std::get_if<bool>(&value))
-            {
-                BasicElement.push_back(*ptr);
-            }
-            else if (auto ptr = std::get_if<int64_t>(&value))
-            {
-                BasicElement.push_back(*ptr);
-            }
-        }
+        /**
+         * @brief Adds a non-string value to the array.
+         *
+         * Adds a value of any type except std::string to the array.
+         *
+         * @param value The value to add to the array.
+         */
+        void add_any_except_string(VariantType value) noexcept;
 
-        inline void add_string(const std::string &str)
+        /**
+         * @brief Adds a string to the array.
+         *
+         * Adds a std::string to the array.
+         *
+         * @param str The string to add to the array.
+         */
+        inline void add_string(const std::string &str) noexcept
         {
             BasicElement.push_back(str);
         }
 
-        const VariantTypeI consult(size_t index) const
-        {
-
-            if (index > BasicElement.size() || index < 0)
-            {
-                throw std::runtime_error("Index not available.");
-            }
-
-            if (auto ptr = std::get_if<std::string>(&BasicElement[index]))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<bool>(&BasicElement[index]))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<long double>(&BasicElement[index]))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<char>(&BasicElement[index]))
-            {
-                return *ptr;
-            }
-            else if (auto ptr = std::get_if<int64_t>(&BasicElement[index]))
-            {
-                return *ptr;
-            }
-            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&BasicElement[index]))
-            {
-                /* std::cout << "{\n";
-                 JSONobject *aux = ptr->get();
-                 aux->iterate(aux);
-                 std::cout << "}" << std::endl;*/
-                return ptr->get();
-            }
-            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&BasicElement[index]))
-            {
-                /*std::cout << "[\n";
-                JSONarray *aux = ptr->get();
-                iterate(aux);
-                std::cout << "]" << std::endl;*/
-                return ptr->get();
-            }
-            else
-                return 0;
-        }
-        /*
-        const std::vector<VariantType> &
-        GetVector() const
-        {
-            return BasicElement;
-        }
-
-        JSONobject *iterate(JSONarray *array) const
-        {
-            bool comma = false;
-            for (const auto &element : array->GetVector())
-            {
-                if (!comma)
-                {
-                    comma = true;
-                }
-                else
-                    std::cout << ", ";
-                if (auto ptr = std::get_if<std::string>(&element))
-                {
-                    std::cout << *ptr;
-                }
-                else if (auto ptr = std::get_if<int64_t>(&element))
-                {
-                    std::cout << *ptr;
-                }
-                else if (auto ptr = std::get_if<bool>(&element))
-                {
-                    std::cout << std::boolalpha << *ptr;
-                }
-                else if (auto ptr = std::get_if<long double>(&element))
-                {
-                    std::cout << *ptr;
-                }
-                else if (auto ptr = std::get_if<char>(&element))
-                {
-                    std::cout << *ptr;
-                }
-                else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&element))
-                {
-                    std::cout << "[\n";
-                    JSONarray *aux = ptr->get();
-                    iterate(aux);
-                    std::cout << "]" << std::endl;
-                }
-                else if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&element))
-                {
-                    return ptr->get();
-                }
-            }
-            std::cout << std::endl;
-            return nullptr;
-        }
-        */
+        /**
+         * @brief Retrieves an element from the array by index.
+         *
+         * Returns the element at the specified index.
+         *
+         * @param index The index of the element to retrieve.
+         * @return The element at the specified index.
+         * @throws std::runtime_error If the index is out of range.
+         */
+        const VariantTypeI consult(size_t index) const;
 
     private:
         //--------------------- ATTRIBUTES
-        std::vector<VariantType> BasicElement; // Array of basic elements
+
+        /// Vector to store the elements of the JSON array.
+        std::vector<VariantType> BasicElement;
     };
 
-} // namespace JsonParse
+} // namespace JsonParserVicetrice
+
 #endif

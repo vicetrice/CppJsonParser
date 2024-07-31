@@ -5,7 +5,7 @@
 #include <vector>	 //std::vector
 #include <sstream>	 //std::ifstream, std::istream
 #include "Token.hpp" //Token
-#include "JSONstruct.hpp"
+#include "JSONstruct.hpp" //JSONstruct
 
 namespace JsonParserVicetrice
 {
