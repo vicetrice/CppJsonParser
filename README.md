@@ -1,4 +1,3 @@
-Aquí tienes el `README.md` listo para copiar y pegar en tu repositorio de GitHub:
 
 ```markdown
 # JSON Parser
