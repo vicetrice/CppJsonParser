@@ -84,8 +84,29 @@ int main()
 
 You should see the output of the JSON values from the file.
 
-## JSON basic types convertion
--
+## JSON Basic Types Conversion
+
+The `JSON` class supports the following basic JSON types and their conversion:
+
+- **`std::string`**: Represents a string value in JSON.
+- **`bool`**: Represents a boolean value (`true` or `false`) in JSON.
+- **`long double`**: Represents a floating-point number with extended precision in JSON.
+- **`int64_t`**: Represents a 64-bit integer in JSON.
+- **`char`**: Represents null type in JSON. returns in case of null(`\0`)
+
+### Conversion Example
+
+To convert a JSON element to a specific type, use the `get<T>()` method:
+
+```cpp
+std::string str_value = json["key"/index].get<std::string>();
+bool bool_value = json["key"/index].get<bool>();
+long double ld_value = json["key"/index].get<long double>();
+int64_t int_value = json["key"/index].get<int64_t>();
+char char_value = json["key"/index].get<char>();
+```
+
+If the stored element is not of the requested type, a `std::runtime_error` will be thrown.
 
 
 ## API Documentation
