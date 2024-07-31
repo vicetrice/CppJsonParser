@@ -9,7 +9,7 @@ int main()
 {
 	using namespace std::chrono; // Para simplificar el uso de chrono
 
-	std::ifstream file("exit.json");
+	std::ifstream file("prueba.json");
 
 	if (!file.is_open())
 	{
@@ -22,7 +22,7 @@ int main()
 	JsonParserVicetrice::Parser Parser2(file);
 	JsonParserVicetrice::JSONstruct strut;
 	strut = std::move(Parser2.tokenize());
-	strut.consult("casanova");
+	//strut.consult("casanova");
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();

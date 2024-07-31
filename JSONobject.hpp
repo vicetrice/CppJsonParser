@@ -16,7 +16,7 @@ namespace JsonParserVicetrice
     class JSONobject
     {
     public:
-        using VariantType = std::variant<std::string, int, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
 
         inline JSONobject() = default;
         inline ~JSONobject() = default;
@@ -47,7 +47,7 @@ namespace JsonParserVicetrice
             {
                 BasicPair[key] = *ptr;
             }
-            else if (auto ptr = std::get_if<int>(&value))
+            else if (auto ptr = std::get_if<int64_t>(&value))
             {
                 BasicPair[key] = *ptr;
             }
@@ -83,7 +83,7 @@ namespace JsonParserVicetrice
             {
                 std::cout << key << ": " << *ptr << std::endl;
             }
-            else if (auto ptr = std::get_if<int>(&BasicPair.at(key)))
+            else if (auto ptr = std::get_if<int64_t>(&BasicPair.at(key)))
             {
                 std::cout << key << ": " << *ptr << std::endl;
             }

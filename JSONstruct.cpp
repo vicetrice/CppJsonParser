@@ -110,12 +110,12 @@ namespace JsonParserVicetrice
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
-                    ptrObj->add_any_except_string(key, std::stoi(token.Value));
+                    ptrObj->add_any_except_string(key, std::stoll(token.Value));
                 }
                 else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
                 {
                     ptrArr = *ptr;
-                    ptrArr->add_any_except_string(std::stoi(token.Value));
+                    ptrArr->add_any_except_string(std::stoll(token.Value));
                 }
             }
 
