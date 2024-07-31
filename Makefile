@@ -5,7 +5,7 @@ CXXFLAGS = -Wall  -Werror -std=c++17
 # Source files
 SRCS = Parser.cpp Rules.cpp JSONstruct.cpp main.cpp 
 OBJS = $(SRCS:.cpp=.o)
-DEPS = Parser.hpp Rules.hpp Token.hpp JSONobject.hpp JSONarray.hpp JSONstruct.hpp
+DEPS = Parser.hpp Rules.hpp Token.hpp JSONobject.hpp JSONarray.hpp JSONstruct.hpp JSON.hpp
 
 # Define platform-specific variables
 ifeq ($(OS),Windows_NT)

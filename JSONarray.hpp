@@ -16,6 +16,7 @@ namespace JsonParserVicetrice
     {
     public:
         using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        using VariantTypeI = std::variant<std::string, int64_t, bool, long double, char, JSONobject *, JSONarray *>;
 
         inline JSONarray() = default;
 
@@ -58,12 +59,107 @@ namespace JsonParserVicetrice
             BasicElement.push_back(str);
         }
 
-        inline void add_double(const std::string &key, long double &d)
+        const VariantTypeI consult(size_t index) const
         {
-            BasicElement.push_back(d);
+
+            if (index > BasicElement.size() || index < 0)
+            {
+                throw std::runtime_error("Index not available.");
+            }
+
+            if (auto ptr = std::get_if<std::string>(&BasicElement[index]))
+            {
+                return *ptr;
+            }
+            else if (auto ptr = std::get_if<bool>(&BasicElement[index]))
+            {
+                return *ptr;
+            }
+            else if (auto ptr = std::get_if<long double>(&BasicElement[index]))
+            {
+                return *ptr;
+            }
+            else if (auto ptr = std::get_if<char>(&BasicElement[index]))
+            {
+                return *ptr;
+            }
+            else if (auto ptr = std::get_if<int64_t>(&BasicElement[index]))
+            {
+                return *ptr;
+            }
+            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&BasicElement[index]))
+            {
+                /* std::cout << "{\n";
+                 JSONobject *aux = ptr->get();
+                 aux->iterate(aux);
+                 std::cout << "}" << std::endl;*/
+                return ptr->get();
+            }
+            else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&BasicElement[index]))
+            {
+                /*std::cout << "[\n";
+                JSONarray *aux = ptr->get();
+                iterate(aux);
+                std::cout << "]" << std::endl;*/
+                return ptr->get();
+            }
+            else
+                return 0;
+        }
+        /*
+        const std::vector<VariantType> &
+        GetVector() const
+        {
+            return BasicElement;
         }
 
-        inline void consult(size_t index);
+        JSONobject *iterate(JSONarray *array) const
+        {
+            bool comma = false;
+            for (const auto &element : array->GetVector())
+            {
+                if (!comma)
+                {
+                    comma = true;
+                }
+                else
+                    std::cout << ", ";
+                if (auto ptr = std::get_if<std::string>(&element))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<int64_t>(&element))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<bool>(&element))
+                {
+                    std::cout << std::boolalpha << *ptr;
+                }
+                else if (auto ptr = std::get_if<long double>(&element))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<char>(&element))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<std::unique_ptr<JSONarray>>(&element))
+                {
+                    std::cout << "[\n";
+                    JSONarray *aux = ptr->get();
+                    iterate(aux);
+                    std::cout << "]" << std::endl;
+                }
+                else if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&element))
+                {
+                    return ptr->get();
+                }
+            }
+            std::cout << std::endl;
+            return nullptr;
+        }
+        */
 
     private:
         //--------------------- ATTRIBUTES
