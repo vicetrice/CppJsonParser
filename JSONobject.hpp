@@ -87,12 +87,68 @@ namespace JsonParserVicetrice
             {
                 std::cout << key << ": " << *ptr << std::endl;
             }
+            else if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << "{\n";
+                JSONobject *aux = ptr->get();
+                iterate(aux);
+                std::cout << "}" << std::endl;
+            }
+        }
+
+        const std::unordered_map<std::string, VariantType> &GetMap() const
+        {
+            return BasicPair;
         }
 
     private:
         //--------------------- ATTRIBUTES
         std::unordered_map<std::string, VariantType> BasicPair; // unordered_map of basic types
 
+        //--------------------- PRIVATE METHODS
+
+        void iterate(JSONobject *object) const
+        {
+            bool comma = false;
+            for (const auto &pair : object->GetMap())
+            {
+                if (!comma)
+                {
+                    comma = true;
+                }
+                else
+                    std::cout << ", ";
+                std::cout << pair.first << ": ";
+                if (auto ptr = std::get_if<std::string>(&pair.second))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<int64_t>(&pair.second))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<bool>(&pair.second))
+                {
+                    std::cout << std::boolalpha << *ptr;
+                }
+                else if (auto ptr = std::get_if<long double>(&pair.second))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<char>(&pair.second))
+                {
+                    std::cout << *ptr;
+                }
+                else if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&pair.second))
+                {
+                    std::cout << "{\n";
+                    JSONobject *aux = ptr->get();
+                    iterate(aux);
+                    std::cout << "}" << std::endl;
+                }
+            }
+            std::cout << std::endl;
+        }
     }; // class JSONobject
 
 } // namespace JsonParserVicetrice

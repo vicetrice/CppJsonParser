@@ -22,7 +22,7 @@ int main()
 	JsonParserVicetrice::Parser Parser2(file);
 	JsonParserVicetrice::JSONstruct strut;
 	strut = std::move(Parser2.tokenize());
-	//strut.consult("casanova");
+	//strut.consult("wow");
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();
