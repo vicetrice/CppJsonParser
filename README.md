@@ -1,5 +1,4 @@
 
-```markdown
 # JSON Parser
 
 ## Overview
@@ -111,6 +110,3 @@ If you would like to contribute to the project, please fork the repository and s
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-```
-
-Just copy and paste this content into a file named `README.md` in your GitHub repository. Make sure to adjust any paths or details specific to your project setup as needed.
