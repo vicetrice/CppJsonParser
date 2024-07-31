@@ -108,6 +108,7 @@ namespace JsonParserVicetrice
 
 				rules.inspect(token.Type);
 				finalStruct.add(token);
+				
 
 				// tokens.push_back(token);
 			}
@@ -305,6 +306,7 @@ namespace JsonParserVicetrice
 		{
 			result += current_char;
 			current_char = getNextChar();
+			type = TokenType::DOUBLE;
 
 			if (current_char == '+' || current_char == '-')
 			{

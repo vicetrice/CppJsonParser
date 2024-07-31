@@ -24,6 +24,15 @@ namespace JsonParserVicetrice
          */
         void add(const Token &token);
 
+        inline void consult(const std::string &key)
+        {
+            if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&finalStruct))
+            {
+                JSONobject *stru = ptr->get();
+                stru->consult(key);
+            }
+        }
+
     private:
         //--------------------- ATTRIBUTES
         using VariantStruct = std::variant<std::unique_ptr<JSONobject>, std::unique_ptr<JSONarray>>;

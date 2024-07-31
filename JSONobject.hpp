@@ -16,7 +16,7 @@ namespace JsonParserVicetrice
     class JSONobject
     {
     public:
-        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        using VariantType = std::variant<std::string, int, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
 
         inline JSONobject() = default;
         inline ~JSONobject() = default;
@@ -47,7 +47,7 @@ namespace JsonParserVicetrice
             {
                 BasicPair[key] = *ptr;
             }
-            else if (auto ptr = std::get_if<int64_t>(&value))
+            else if (auto ptr = std::get_if<int>(&value))
             {
                 BasicPair[key] = *ptr;
             }
@@ -56,6 +56,37 @@ namespace JsonParserVicetrice
         inline void add_string(const std::string &key, const std::string &str)
         {
             BasicPair[key] = str;
+        }
+
+        inline void consult(const std::string &key)
+        {
+            auto it = BasicPair.find(key);
+            if (it == BasicPair.end())
+            {
+                std::cerr << "Key not found: " << key << std::endl;
+                return;
+            }
+
+            if (auto ptr = std::get_if<std::string>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << *ptr << std::endl;
+            }
+            else if (auto ptr = std::get_if<bool>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << std::boolalpha << *ptr << std::endl;
+            }
+            else if (auto ptr = std::get_if<long double>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << *ptr << std::endl;
+            }
+            else if (auto ptr = std::get_if<char>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << *ptr << std::endl;
+            }
+            else if (auto ptr = std::get_if<int>(&BasicPair.at(key)))
+            {
+                std::cout << key << ": " << *ptr << std::endl;
+            }
         }
 
     private:

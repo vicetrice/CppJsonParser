@@ -1,9 +1,11 @@
 #include "JSONstruct.hpp"
+#include <iostream>
+
 
 namespace JsonParserVicetrice
 {
 
-    JSONstruct::JSONstruct() : noFirst{false} {};
+    JSONstruct::JSONstruct() : noFirst{false} {}
 
     JSONstruct::~JSONstruct() = default;
 
@@ -46,7 +48,7 @@ namespace JsonParserVicetrice
                     position.push_back(ptr_to_struct.get());
                     ptrArr->add_any_except_string(std::move(ptr_to_struct));
                 }
-                        }
+            }
 
             break;
         case TokenType::LEFT_BRACKET:
@@ -84,9 +86,11 @@ namespace JsonParserVicetrice
             position.pop_back();
             break;
         case TokenType::DOUBLE:
+            //std::cout << "pase por aqui DOUBLE con: " << token.Value << std::endl;
 
             if (noFirst)
             {
+                
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
@@ -98,6 +102,7 @@ namespace JsonParserVicetrice
                     ptrArr->add_any_except_string(std::stold(token.Value));
                 }
             }
+            break;
         case TokenType::NUMBER:
 
             if (noFirst)
@@ -105,12 +110,12 @@ namespace JsonParserVicetrice
                 if (auto ptr = std::get_if<JSONobject *>(&position.back()))
                 {
                     ptrObj = *ptr;
-                    ptrObj->add_any_except_string(key, std::stoll(token.Value));
+                    ptrObj->add_any_except_string(key, std::stoi(token.Value));
                 }
                 else if (auto ptr = std::get_if<JSONarray *>(&position.back()))
                 {
                     ptrArr = *ptr;
-                    ptrArr->add_any_except_string(std::stoll(token.Value));
+                    ptrArr->add_any_except_string(std::stoi(token.Value));
                 }
             }
 

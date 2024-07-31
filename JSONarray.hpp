@@ -15,7 +15,7 @@ namespace JsonParserVicetrice
     class JSONarray
     {
     public:
-        using VariantType = std::variant<std::string, int64_t, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
+        using VariantType = std::variant<std::string, int, bool, long double, char, std::unique_ptr<JsonParserVicetrice::JSONarray>, std::unique_ptr<JsonParserVicetrice::JSONobject>>;
 
         inline JSONarray() = default;
 
@@ -47,7 +47,7 @@ namespace JsonParserVicetrice
             {
                 BasicElement.push_back(*ptr);
             }
-            else if (auto ptr = std::get_if<int64_t>(&value))
+            else if (auto ptr = std::get_if<int>(&value))
             {
                 BasicElement.push_back(*ptr);
             }
@@ -57,6 +57,13 @@ namespace JsonParserVicetrice
         {
             BasicElement.push_back(str);
         }
+
+        inline void add_double(const std::string &key, long double &d)
+        {
+            BasicElement.push_back(d);
+        }
+
+        inline void consult(size_t index);
 
     private:
         //--------------------- ATTRIBUTES
