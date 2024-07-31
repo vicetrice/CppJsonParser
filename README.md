@@ -15,7 +15,7 @@ This project provides a JSON parsing library implemented in C++. The library inc
 
 ### Prerequisites
 
-- C++11 or later
+- C++17 or later
 - A JSON file to parse (e.g., `prueba.json`)
 
 ### Building
