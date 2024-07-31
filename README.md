@@ -120,7 +120,3 @@ If the stored element is not of the requested type, a `std::runtime_error` will 
 ## Contributing
 
 If you would like to contribute to the project, please fork the repository and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
