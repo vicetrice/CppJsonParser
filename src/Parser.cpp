@@ -118,11 +118,6 @@ namespace JsonParserVicetrice
 			throw std::runtime_error("Unbalanced brackets/Braces");
 		}
 
-		if (owns_stream)
-		{
-			delete input;
-		}
-
 		return finalStruct;
 	}
 

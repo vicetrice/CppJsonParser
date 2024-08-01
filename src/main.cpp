@@ -33,6 +33,8 @@ int main()
 		std::cout << loca << std::endl;
 	}
 
+	std::cout << json["statuses"][1]["retweeted_status"][0].size()<<std::endl;
+
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();
 
