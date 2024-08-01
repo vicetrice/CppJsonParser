@@ -39,7 +39,7 @@ The example below demonstrates how to use the `JSON` class to parse a JSON file 
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "JSON.hpp"
+#include "single_include/JSON.hpp"
 
 int main()
 {
