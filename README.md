@@ -27,6 +27,8 @@ g++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSONstru
 ```
 Or change `main.cpp` in `Makefile` to use `make`. 
 
+it's not strict to use g++, can change for you favorite compiler.
+
 ### Example Usage
 
 The example below demonstrates how to use the `JSON` class to parse a JSON file and access its contents. 
