@@ -23,7 +23,7 @@ This project provides a JSON parsing library implemented in C++. The library inc
 To build the project, ensure you have a C++ compiler and make utility available. Use the following command to compile the project:
 
 ```bash
-g++ -std=c++11 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp
+g++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSON struct.cpp
 ```
 Or change `main.cpp` in `Makefile` to use `make`. 
 
