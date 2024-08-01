@@ -394,6 +394,15 @@ namespace JsonParserVicetrice
             BasicElement.push_back(str);
         }
 
+        /**
+         * @brief Consult the size of the JSONarray
+         * @return Size of JSONarray
+         */
+        inline size_t size() const
+        {
+            return BasicElement.size();
+        }
+
     private:
         //--------------------- ATTRIBUTES
 
@@ -493,7 +502,7 @@ namespace JsonParserVicetrice
             auto it = BasicPair.find(key);
             if (it == BasicPair.end())
             {
-                throw std::runtime_error("Key not found.");
+                throw std::runtime_error(key + " not found.");
             }
 
             if (auto ptr = std::get_if<std::string>(&BasicPair.at(key)))
@@ -544,6 +553,15 @@ namespace JsonParserVicetrice
             {
                 throw std::runtime_error("Duplicated keys are not allowed.");
             }
+        }
+
+        /**
+         * @brief Consult the size of the JSONobject
+         * @return Size of JSONobject
+         */
+        inline size_t size() const
+        {
+            return BasicPair.size();
         }
 
     private:
@@ -847,7 +865,6 @@ namespace JsonParserVicetrice
             JSONstruct finalStruct;
 
             Token token;
-
             do
             {
                 try
@@ -878,11 +895,6 @@ namespace JsonParserVicetrice
                 if (owns_stream)
                     delete input;
                 throw std::runtime_error("Unbalanced brackets/Braces");
-            }
-
-            if (owns_stream)
-            {
-                delete input;
             }
 
             return finalStruct;
@@ -1217,6 +1229,7 @@ namespace JsonParserVicetrice
         {
             try
             {
+
                 Parser parser(input);
                 start = std::move(parser.tokenize());
                 start.consultIni(head);
@@ -1259,23 +1272,24 @@ namespace JsonParserVicetrice
          */
         JSON &operator[](const std::string &index)
         {
+
             try
             {
-                if (auto ptr = std::get_if<JSONobject *>(&(this->head)))
+                if (auto ptr = std::get_if<JSONobject *>(&(head)))
                 {
                     JSONobject *stru = *ptr;
-                    this->element = stru->consult(index);
-                    if (auto ptr = std::get_if<JSONobject *>(&(this->element)))
+                    element = stru->consult(index);
+                    if (auto ptr2 = std::get_if<JSONobject *>(&(element)))
                     {
-                        this->head = *ptr;
+                        head = *ptr2;
                     }
-                    else if (auto ptr = std::get_if<JSONarray *>(&(this->element)))
+                    else if (auto ptr2 = std::get_if<JSONarray *>(&(element)))
                     {
-                        this->head = *ptr;
+                        head = *ptr2;
                     }
                 }
                 else
-                    throw std::runtime_error("Only for searchs if inside a map.");
+                    throw std::runtime_error("key string only for searchs if inside a map.");
             }
             catch (const std::exception &e)
             {
@@ -1297,27 +1311,50 @@ namespace JsonParserVicetrice
         {
             try
             {
-                if (auto ptr = std::get_if<JSONarray *>(&(this->head)))
+                if (auto ptr = std::get_if<JSONarray *>(&(head)))
                 {
                     JSONarray *stru = *ptr;
-                    this->element = stru->consult(index);
-                    if (auto ptr = std::get_if<JSONobject *>(&(this->element)))
+                    element = stru->consult(index);
+                    if (auto ptr2 = std::get_if<JSONobject *>(&(element)))
                     {
-                        this->head = *ptr;
+                        head = *ptr2;
                     }
-                    else if (auto ptr = std::get_if<JSONarray *>(&(this->element)))
+                    else if (auto ptr2 = std::get_if<JSONarray *>(&(element)))
                     {
-                        this->head = *ptr;
+                        head = *ptr2;
                     }
                 }
                 else
-                    throw std::runtime_error("Only for searchs if inside an array.");
+                    throw std::runtime_error("numerical index only for searchs if inside an array.");
             }
             catch (const std::exception &e)
             {
                 throw;
             }
+
             return *this;
+        }
+
+        /**
+         * @brief Consult the size of the JSONstruct
+         * @return size of JSONstruct head is pointing to
+         */
+        size_t size()
+        {
+            if (auto ptr = std::get_if<JSONobject *>(&head))
+            {
+                JSONobject *aux = *ptr;
+                start.consultIni(head);
+                return aux->size();
+            }
+            else if (auto ptr = std::get_if<JSONarray *>(&head))
+            {
+                JSONarray *aux = *ptr;
+                start.consultIni(head);
+                return aux->size();
+            }
+            start.consultIni(head);
+            return 0;
         }
 
     private:
