@@ -72,7 +72,7 @@ namespace JsonParserVicetrice
         auto it = BasicPair.find(key);
         if (it == BasicPair.end())
         {
-            throw std::runtime_error("Key not found.");
+            throw std::runtime_error(key + " not found.");
         }
 
         if (auto ptr = std::get_if<std::string>(&BasicPair.at(key)))

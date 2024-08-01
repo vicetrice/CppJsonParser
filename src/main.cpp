@@ -29,7 +29,7 @@ int main()
 
 	for (size_t i = 0; i < cont; i++)
 	{
-		std::string loca = json["statuses"][i]["id_str"].get<std::string>();
+		std::string loca = json["statuses"][i]["source"].get<std::string>();
 		std::cout << loca << std::endl;
 	}
 
