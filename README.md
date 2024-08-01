@@ -48,7 +48,7 @@ int main()
     if (!file.is_open())
     {
         std::cerr << "Error opening file!" << std::endl;
-        return 1; // Indicate an error occurred
+        return 1;
     }
 
     JsonParserVicetrice::JSON json;
