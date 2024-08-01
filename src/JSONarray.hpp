@@ -1,10 +1,10 @@
 #ifndef __________JSONARRAY_HPP__________
 #define __________JSONARRAY_HPP__________
 
-#include <string>  // std::string
-#include <variant> // std::variant
-#include <vector>  // std::vector
-#include <memory>  // std::unique_ptr
+#include <string>   // std::string
+#include <variant>  // std::variant
+#include <vector>   // std::vector
+#include <memory>   // std::unique_ptr
 #include <iostream> //std::cout
 
 namespace JsonParserVicetrice
@@ -65,6 +65,15 @@ namespace JsonParserVicetrice
          * @throws std::runtime_error If the index is out of range.
          */
         const VariantTypeI consult(size_t index) const;
+
+        /**
+         * @brief Consult the size of the JSONarray
+         * @return Size of JSONarray
+         */
+        inline size_t JSONarray::size() const
+        {
+            return BasicElement.size();
+        }
 
     private:
         //--------------------- ATTRIBUTES

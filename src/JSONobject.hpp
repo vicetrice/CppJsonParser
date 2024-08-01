@@ -80,11 +80,20 @@ namespace JsonParserVicetrice
          * @param key The key to check for existence.
          * @throws std::runtime_error If the key is found in the object.
          */
-         void exists(const std::string &key) const;
+        void exists(const std::string &key) const;
+
+        /**
+         * @brief Consult the size of the JSONobject
+         * @return Size of JSONobject
+         */
+        inline  size_t JSONobject::size() const
+        {
+            return BasicPair.size();
+        }
 
     private:
         //--------------------- ATTRIBUTES
-        
+
         /// Unordered map to store key-value pairs of basic types.
         std::unordered_map<std::string, VariantType> BasicPair;
     }; // class JSONobject

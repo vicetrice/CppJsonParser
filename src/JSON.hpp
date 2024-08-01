@@ -147,6 +147,12 @@ namespace JsonParserVicetrice
          */
         JSON &operator[](size_t index);
 
+        /**
+         * @brief Consult the size of the JSONstruct
+         * @return size of JSONstruct head is pointing to
+         */
+        size_t size() ;
+
     private:
         //--------------------- ATTRIBUTES
         /// Variant type used to store pointers to JSON objects or arrays.

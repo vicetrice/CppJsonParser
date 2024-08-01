@@ -2,14 +2,17 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "single_include/JSON.hpp"
+#include "../single_include/JSON.hpp"
+#include <unordered_map>
 // #include <JSONarray.hpp>
 
 int main()
 {
 	using namespace std::chrono; // Para simplificar el uso de chrono
 
-	std::ifstream file("prueba.json");
+	std::unordered_map<int, int> loco;
+
+	std::ifstream file("../prueba.json");
 
 	if (!file.is_open())
 	{
@@ -22,12 +25,13 @@ int main()
 
 	JsonParserVicetrice::JSON json;
 	json.parse(file);
+	size_t cont = json["statuses"].size();
 
-	std::string loca = json["statuses"][0]["id_str"].get<std::string>();
-	std::string loca2 = json["statuses"][1]["text"].get<std::string>();
-
-	std::cout << loca << std::endl;
-	std::cout << loca2 << std::endl;
+	for (size_t i = 0; i < cont; i++)
+	{
+		std::string loca = json["statuses"][i]["id_str"].get<std::string>();
+		std::cout << loca << std::endl;
+	}
 
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();

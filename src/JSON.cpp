@@ -138,5 +138,25 @@ namespace JsonParserVicetrice
         }
         return *this;
     }
-
+    /**
+     * @brief Consult the size of the JSONstruct
+     * @return size of JSONstruct head is pointing to
+     */
+    size_t JSON::size() 
+    {
+        if (auto ptr = std::get_if<JSONobject *>(&head))
+        {
+            JSONobject *aux = *ptr;
+            start.consultIni(head);
+            return aux->size();
+        }
+        else if (auto ptr = std::get_if<JSONarray *>(&head))
+        {
+            JSONarray *aux = *ptr;
+            start.consultIni(head);
+            return aux->size();
+        }
+        start.consultIni(head);
+        return 0;
+    }
 } // namespace JsonParserVicetrice

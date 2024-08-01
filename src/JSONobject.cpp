@@ -1,11 +1,11 @@
 
-#include <unordered_map> // std::unordered_map
-#include <string>        // std::string
-#include <variant>       // std::variant
-#include <memory>        // std::unique_ptr
-#include <iostream>      // std::ostream
-#include <stdexcept>     //std::runtime_error
-#include "JSONarray.hpp" //JSONarray
+#include <unordered_map>  // std::unordered_map
+#include <string>         // std::string
+#include <variant>        // std::variant
+#include <memory>         // std::unique_ptr
+#include <iostream>       // std::ostream
+#include <stdexcept>      //std::runtime_error
+#include "JSONarray.hpp"  //JSONarray
 #include "JSONobject.hpp" //JSONobject
 
 namespace JsonParserVicetrice
@@ -116,7 +116,7 @@ namespace JsonParserVicetrice
      * @param key The key to check for existence.
      * @throws std::runtime_error If the key is found in the object.
      */
-     void JSONobject::exists(const std::string &key) const
+    void JSONobject::exists(const std::string &key) const
     {
         auto it = BasicPair.find(key);
         if (it != BasicPair.end())
