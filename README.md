@@ -29,6 +29,8 @@ Or change `main.cpp` in `Makefile` to use `make`.
 
 it's not strict to use g++, can change for you favorite compiler.
 
+You can also use the header `JSON.hpp` in `single_include` folder to compile your project without compiling directly the other .cpp of the project.
+
 ### Example Usage
 
 The example below demonstrates how to use the `JSON` class to parse a JSON file and access its contents. 
