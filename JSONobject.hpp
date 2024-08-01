@@ -80,7 +80,7 @@ namespace JsonParserVicetrice
          * @param key The key to check for existence.
          * @throws std::runtime_error If the key is found in the object.
          */
-        const void exists(const std::string &key) const;
+         void exists(const std::string &key) const;
 
     private:
         //--------------------- ATTRIBUTES

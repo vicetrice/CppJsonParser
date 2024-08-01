@@ -116,7 +116,7 @@ namespace JsonParserVicetrice
      * @param key The key to check for existence.
      * @throws std::runtime_error If the key is found in the object.
      */
-    const void JSONobject::exists(const std::string &key) const
+     void JSONobject::exists(const std::string &key) const
     {
         auto it = BasicPair.find(key);
         if (it != BasicPair.end())

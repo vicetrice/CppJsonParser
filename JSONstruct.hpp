@@ -25,7 +25,7 @@ namespace JsonParserVicetrice
          */
         void add(const Token &token);
 
-        inline const void consultIni(VariantPtr &ret) const noexcept
+        inline void consultIni(VariantPtr &ret) const noexcept
         {
             if (auto ptr = std::get_if<std::unique_ptr<JSONobject>>(&finalStruct))
                 ret = ptr->get();
