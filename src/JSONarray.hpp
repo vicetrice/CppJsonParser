@@ -70,7 +70,7 @@ namespace JsonParserVicetrice
          * @brief Consult the size of the JSONarray
          * @return Size of JSONarray
          */
-        inline size_t JSONarray::size() const
+        inline size_t size() const
         {
             return BasicElement.size();
         }

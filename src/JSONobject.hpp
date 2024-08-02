@@ -86,7 +86,7 @@ namespace JsonParserVicetrice
          * @brief Consult the size of the JSONobject
          * @return Size of JSONobject
          */
-        inline  size_t JSONobject::size() const
+        inline  size_t size() const
         {
             return BasicPair.size();
         }
