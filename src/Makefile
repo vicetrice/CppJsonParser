@@ -19,7 +19,7 @@ libparser.a: $(LIB_OBJS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 # Clean up build artifacts
-clean: clean-lib clean-obj
+clean: clean-obj
 
 # Clean library file
 clean-lib:
