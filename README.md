@@ -17,6 +17,7 @@ This project provides a JSON parsing library implemented in C++. The library inc
 
 - C++17 or later
 - A JSON file to parse (e.g., `prueba.json`)
+- GNU compiler
 
 ### Building
 
@@ -26,8 +27,6 @@ To build the project, ensure you have a C++ compiler and make utility available.
 g++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSONstruct.cpp
 ```
 Or change `main.cpp` in `Makefile` to use `make`. 
-
-it's not strict to use g++, can change for your favorite compiler.
 
 You can also use the header `JSON.hpp` in `single_include` folder to compile your project without compiling directly the other .cpp of the project.
 
