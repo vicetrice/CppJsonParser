@@ -20,18 +20,29 @@ This project provides a JSON parsing library implemented in C++. The library inc
 
 ### Building
 
-To build the project, ensure you have a C++ compiler and make utility available. Use the following command to compile the project:
+To build the project, ensure you have a C++ compiler and make utility available. Use the following command to compile the static library:
 
 ```bash
-g++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSONstruct.cpp
+make
 ```
-Or
-```bash
-clang++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSONstruct.cpp
-```
-Or change `main.cpp` in `Makefile` to use `make`. 
 
-You can also use the header `JSON.hpp` in `single_include` folder to compile your project without compiling directly the other .cpp of the project.
+This will generate the static library `libparser.a` which you can use in your own project.
+
+You can also clean the build artifacts using the following command:
+
+```bash
+make clean
+```
+
+Then, compile your `main.cpp` with the static library:
+
+```bash
+g++ -std=c++17 -o my_parser main.cpp -L. -lparser
+```
+
+This will generate an executable called `my_parser`.
+
+You can also use the header `JSON.hpp` in the `single_include` folder to compile your project without directly compiling the other .cpp files of the project and can also change the compiler for one of your preference changing the var `CXX` in the Makefile..
 
 ### Example Usage
 
