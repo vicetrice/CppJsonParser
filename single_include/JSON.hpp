@@ -1231,7 +1231,7 @@ namespace JsonParserVicetrice
             {
 
                 Parser parser(input);
-                start = std::move(parser.tokenize());
+                start = parser.tokenize();
                 start.consultIni(head);
             }
             catch (const std::exception &e)
@@ -1252,7 +1252,7 @@ namespace JsonParserVicetrice
             try
             {
                 Parser parser(input);
-                start = std::move(parser.tokenize());
+                start = parser.tokenize();
                 start.consultIni(head);
             }
             catch (const std::exception &e)
