@@ -27,7 +27,7 @@ g++ -std=c++17 -o parser main.cpp JSON.cpp JSONarray.cpp JSONobject.cpp JSONstru
 ```
 Or change `main.cpp` in `Makefile` to use `make`. 
 
-it's not strict to use g++, can change for you favorite compiler.
+it's not strict to use g++, can change for your favorite compiler.
 
 You can also use the header `JSON.hpp` in `single_include` folder to compile your project without compiling directly the other .cpp of the project.
 
