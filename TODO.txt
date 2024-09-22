@@ -1,0 +1,1 @@
+Parsing speed can increase if the vectors and unordered maps get capacity reserved initially. This can be achieved by changing the JSONarray and JSONobject constructors and then to not waste memory could use shrink_to_fit methods
