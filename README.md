@@ -9,7 +9,6 @@ This project provides a JSON parsing library implemented in C++. The library inc
 
 - **Parsing JSON from files and strings**: Easily parse JSON data from file streams and string inputs.
 - **Access JSON elements**: Retrieve and manipulate JSON elements using the provided API.
-- **Performance**: Includes basic performance measurement for parsing operations.
 
 ## Getting Started
 
